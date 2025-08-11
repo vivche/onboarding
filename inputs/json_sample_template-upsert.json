@@ -295,22 +295,22 @@
         {
           "scope": "api",
           "name": "kpi_splh_threshold_weekly_baseline",
-          "value": "78"
+          "value": "77"
         },
         {
           "scope": "api",
           "name": "kpi_sos_threshold_weekly_baseline",
-          "value": "385"
+          "value": "384"
         },
         {
           "scope": "api",
           "name": "min_date",
-          "value": "2025-05-02"
+          "value": "2025-05-01"
         },
         {
           "scope": "ds",
           "name": "start_time_for_daily_aar",
-          "value": "13:01"
+          "value": "13:00"
         },
         {
           "scope": "ingest",
