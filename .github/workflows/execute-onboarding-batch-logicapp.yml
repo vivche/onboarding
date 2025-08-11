@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       jsonFile:
-        description: 'Path to the JSON file inside the input folder, ex. input/sample.json'
+        description: 'Path to the JSON file inside the input folder
         required: true
-        default: 'input/sample.json'
+        default: 'inputs/sample.json'
 
 jobs:
   trigger-logic-app:
