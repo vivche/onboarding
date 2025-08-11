@@ -1,0 +1,365 @@
+[
+  {
+    "storeIdentifier": "CKE||SDC|1100083",
+	
+	
+    "spanTypes": [
+      {
+        "SpanType": "Snack"
+      }
+    ],
+	
+	
+    "spanTimeConfigurations": [
+      {
+        "SpanTypeId": 11,
+        "SiteId": 3899976,
+        "StartTime": "06:00:00",
+        "DurationInSeconds": 18000,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2200-12-31"
+      },
+      {
+        "SpanTypeId": 12,
+        "SiteId": 3899976,
+        "StartTime": "11:00:00",
+        "DurationInSeconds": 10800,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2200-12-31"
+      },
+      {
+        "SpanTypeId": 13,
+        "SiteId": 3899976,
+        "StartTime": "14:00:00",
+        "DurationInSeconds": 10800,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2200-12-31"
+      },
+      {
+        "SpanTypeId": 14,
+        "SiteId": 3899976,
+        "StartTime": "17:00:00",
+        "DurationInSeconds": 10800,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2200-12-31"
+      },
+      {
+        "SpanTypeId": 16,
+        "SiteId": 3899976,
+        "StartTime": "01:00:00",
+        "DurationInSeconds": 10800,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2200-12-31"
+      },
+      {
+        "SpanTypeId": 17,
+        "SiteId": 3899976,
+        "StartTime": "00:00:00",
+        "DurationInSeconds": 86399,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2200-12-31"
+      },
+      {
+        "SpanTypeId": 15,
+        "SiteId": 3899976,
+        "StartTime": "20:00:00",
+        "DurationInSeconds": 18000,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2025-01-31"
+      },
+      {
+        "SpanTypeId": 15,
+        "SiteId": 3899976,
+        "StartTime": "20:00:00",
+        "DurationInSeconds": 18000,
+        "StartOn": "2025-02-01",
+        "ExpiryOn": "2025-07-20"
+      },
+      {
+        "SpanTypeId": 15,
+        "SiteId": 3899976,
+        "StartTime": "20:00:00",
+        "DurationInSeconds": 14400,
+        "StartOn": "2025-07-21",
+        "ExpiryOn": "2250-07-31"
+      }
+    ],
+	
+	
+    "globalConfigKeys": {
+      "keys": [
+        {
+          "scope": "x",
+          "name": "dayparts",
+          "value": "[ { \"id\": \"11\", \"name\": \"Breakfast\", \"start\": \"06:00\", \"end\": \"10:59\", \"is_significant\": true }, { \"id\": \"12\", \"name\": \"Lunch\", \"start\": \"11:00\", \"end\": \"13:59\", \"is_significant\": true }, { \"id\": \"13\", \"name\": \"Afternoon\", \"start\": \"14:00\", \"end\": \"16:59\", \"is_significant\": true }, { \"id\": \"14\", \"name\": \"Dinner\", \"start\": \"17:00\", \"end\": \"19:59\", \"is_significant\": true }, { \"id\": \"15\", \"name\": \"Late Night\", \"start\": \"20:00\", \"end\": \"23:59\", \"is_significant\": true }, { \"id\": \"16\", \"name\": \"Graveyard\", \"start\": \"0:00\", \"end\": \"5:59\", \"is_significant\": false }, { \"id\": \"17\", \"name\": \"All Day\", \"start\": \"0:00\", \"end\": \"23:59\", \"is_significant\": true } ]"
+        },
+        {
+          "scope": "x",
+          "name": "destinations",
+          "value": "[ { \"id\": \"1\", \"name\": \"Dine In\", \"orderIndex\": \"2\", \"show_in_ui\": true }, { \"id\": \"2\", \"name\": \"Carry Out\", \"orderIndex\": \"3\", \"show_in_ui\": true }, { \"id\": \"3\", \"name\": \"Drive Thru\", \"orderIndex\": \"1\", \"show_in_ui\": true }, { \"id\": \"4\", \"name\": \"Delivery\", \"orderIndex\": \"4\", \"show_in_ui\": false }, { \"id\": \"5\", \"name\": \"Online FC\", \"orderIndex\": \"5\", \"show_in_ui\": false } ]"
+        },
+        {
+          "scope": "ds",
+          "name": "max_slow_items",
+          "value": "14"
+        },
+        {
+          "scope": "ds",
+          "name": "min_orders_for_slow_items",
+          "value": "101"
+        },
+        {
+          "scope": "ds",
+          "name": "min_sos_threshold_for_slow_items",
+          "value": "11"
+        },
+        {
+          "scope": "ds",
+          "name": "max_orders_for_slow_items",
+          "value": "16"
+        },
+        {
+          "scope": "ds",
+          "name": "max_order_count_percentile_for_slow_items",
+          "value": "0.91"
+        },
+        {
+          "scope": "ds",
+          "name": "max_slow_customizations",
+          "value": "14"
+        },
+        {
+          "scope": "ds",
+          "name": "min_orders_for_slow_customizations",
+          "value": "101"
+        },
+        {
+          "scope": "ds",
+          "name": "min_sos_threshold_for_slow_customizations",
+          "value": "11"
+        },
+        {
+          "scope": "ds",
+          "name": "max_sos_threshold_for_slow_customizations",
+          "value": "901"
+        },
+        {
+          "scope": "ds",
+          "name": "max_orders_for_slow_customizations",
+          "value": "16"
+        },
+        {
+          "scope": "ds",
+          "name": "max_order_count_percentile_for_slow_customizations",
+          "value": "0.91"
+        },
+        {
+          "scope": "ingest",
+          "name": "sales_snapshots_interval",
+          "value": "301"
+        },
+        {
+          "scope": "ingest",
+          "name": "channel_map_id",
+          "value": "2"
+        },
+        {
+          "scope": "ingest",
+          "name": "span_type_map_id",
+          "value": "2"
+        }
+      ],	   
+      "constraints": [
+        {
+          "scope": "ingest",
+          "name": "sales_snapshots_interval",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "ingest",
+          "name": "channel_map_id",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "ingest",
+          "name": "span_type_map_id",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "x",
+          "name": "dayparts",
+          "value": "IS_STRING"
+        },
+        {
+          "scope": "x",
+          "name": "destinations",
+          "value": "IS_STRING"
+        },
+        {
+          "scope": "ds",
+          "name": "max_slow_items",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "ds",
+          "name": "min_orders_for_slow_items",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "ds",
+          "name": "min_sos_threshold_for_slow_items",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "ds",
+          "name": "max_orders_for_slow_items",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "ds",
+          "name": "max_order_count_percentile_for_slow_items",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "ds",
+          "name": "max_slow_customizations",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "ds",
+          "name": "min_orders_for_slow_customizations",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "ds",
+          "name": "min_sos_threshold_for_slow_customizations",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "ds",
+          "name": "max_sos_threshold_for_slow_customizations",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "ds",
+          "name": "max_orders_for_slow_customizations",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "ds",
+          "name": "max_order_count_percentile_for_slow_customizations",
+          "value": "IS_NUMBER"
+        }
+      ]
+    },
+	
+	
+    "brandConfigKeys": {
+      "keys": [
+        {
+          "scope": "xxx",
+          "name": "xxx",
+          "value": "xxx"
+        }
+      ],
+      "constraints": [
+        {
+          "scope": "",
+          "name": "",
+          "value": ""
+        }
+      ]
+    },
+	
+	
+    "accountConfigKeys": {
+      "keys": [
+        {
+          "scope": "xxx",
+          "name": "xxx",
+          "value": "xxx"
+        }
+      ],
+      "constraints": [
+        {
+          "scope": "xxx",
+          "name": "xxx",
+          "value": "xxx"
+        }
+      ]
+    },
+	
+	
+    "siteConfigKeys": {
+      "keys": [
+        {
+          "scope": "api",
+          "name": "kpi_splh_threshold_weekly_baseline",
+          "value": "78"
+        },
+        {
+          "scope": "api",
+          "name": "kpi_sos_threshold_weekly_baseline",
+          "value": "385"
+        },
+        {
+          "scope": "api",
+          "name": "min_date",
+          "value": "2025-05-02"
+        },
+        {
+          "scope": "ds",
+          "name": "start_time_for_daily_aar",
+          "value": "13:01"
+        },
+        {
+          "scope": "ingest",
+          "name": "sales_filename_pattern",
+          "value": "^(\\d+)\\\\FORECAST_SALES\\d{8}_\\d{12}\\.csv$"
+        },
+        {
+          "scope": "ingest",
+          "name": "labor_filename_pattern",
+          "value": "^(\\d+)\\\\FORECAST_SALES\\d{8}_\\d{12}\\.csv$"
+        },
+        {
+          "scope": "ingest",
+          "name": "order_filename_pattern",
+          "value": "^\\d{6}(\\d{7})\\.zip$"
+        }
+      ],
+      "constraints": [
+        {
+          "scope": "api",
+          "name": "kpi_splh_threshold_weekly_baseline",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "api",
+          "name": "kpi_sos_threshold_weekly_baseline",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "api",
+          "name": "min_date",
+          "value": "IS_DATE"
+        },
+        {
+          "scope": "ingest",
+          "name": "sales_filename_pattern",
+          "value": "IS_STRING"
+        },
+        {
+          "scope": "ingest",
+          "name": "labor_filename_pattern",
+          "value": "IS_STRING"
+        },
+        {
+          "scope": "ingest",
+          "name": "order_filename_pattern",
+          "value": "IS_STRING"
+        }
+      ]
+    }
+  }
+]

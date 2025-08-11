@@ -1,0 +1,37 @@
+[
+  {
+    "storeIdentifier": "CKE||SDC|1100083",
+    "deleteSiteConfigKeys": [
+      { "scope": "ds", "name": "max_slow_items" },
+      { "scope": "ds", "name": "min_orders_for_slow_items" },
+      { "scope": "ds", "name": "min_sos_threshold_for_slow_items" },
+      { "scope": "ds", "name": "max_orders_for_slow_items" },
+      { "scope": "ds", "name": "max_order_count_percentile_for_slow_items" },
+      { "scope": "ds", "name": "max_slow_customizations" },
+      { "scope": "ds", "name": "min_orders_for_slow_customizations" },
+      { "scope": "ds", "name": "min_sos_threshold_for_slow_customizations" },
+      { "scope": "ds", "name": "max_sos_threshold_for_slow_customizations" },
+      { "scope": "ds", "name": "max_orders_for_slow_customizations" },
+      { "scope": "ds", "name": "max_order_count_percentile_for_slow_customizations" },
+      { "scope": "ingest", "name": "sales_snapshots_interval" },
+      { "scope": "ingest", "name": "channel_map_id" },
+      { "scope": "ingest", "name": "span_type_map_id" }
+    ],
+    "deleteSiteConfigConstraints": [
+      { "scope": "ingest", "name": "sales_snapshots_interval" },
+      { "scope": "ingest", "name": "channel_map_id" },
+      { "scope": "ingest", "name": "span_type_map_id" },
+      { "scope": "ds", "name": "max_slow_items" },
+      { "scope": "ds", "name": "min_orders_for_slow_items" },
+      { "scope": "ds", "name": "min_sos_threshold_for_slow_items" },
+      { "scope": "ds", "name": "max_orders_for_slow_items" },
+      { "scope": "ds", "name": "max_order_count_percentile_for_slow_items" },
+      { "scope": "ds", "name": "max_slow_customizations" },
+      { "scope": "ds", "name": "min_orders_for_slow_customizations" },
+      { "scope": "ds", "name": "min_sos_threshold_for_slow_customizations" },
+      { "scope": "ds", "name": "max_sos_threshold_for_slow_customizations" },
+      { "scope": "ds", "name": "max_orders_for_slow_customizations" },
+      { "scope": "ds", "name": "max_order_count_percentile_for_slow_customizations" }
+    ]
+  }
+]

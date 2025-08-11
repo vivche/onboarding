@@ -1,0 +1,28 @@
+name: Trigger Logic App
+
+on:
+  workflow_dispatch:
+
+jobs:
+  trigger-logic-app:
+    runs-on: ubuntu-latest
+    env:
+      LOGIC_APP_URL: ${{ secrets.LOGIC_APP_URL }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Read JSON payload
+        id: read_json
+        run: |
+          payload=$(cat path/to/your/input.json)
+          echo "payload<<EOF" >> $GITHUB_ENV
+          echo "$payload" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Trigger Logic App
+        run: |
+          curl -X POST "$LOGIC_APP_URL" \
+            -H "Content-Type: application/json" \
+            -d "$payload"
