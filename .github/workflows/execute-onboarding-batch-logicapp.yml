@@ -2,12 +2,17 @@ name: Trigger Logic App
 
 on:
   workflow_dispatch:
+    inputs:
+      jsonFile:
+        description: 'Path to the JSON file inside the input folder, ex. input/sample.json'
+        required: true
+        default: 'input/sample.json'
 
 jobs:
   trigger-logic-app:
     runs-on: ubuntu-latest
     env:
-      LOGIC_APP_URL: ${{ secrets.LOGIC_APP_URL }}
+      ONBOARDING_BATCH_LOGIC_APP_DEV_URL: ${{ secrets.ONBOARDING_BATCH_LOGIC_APP_DEV_URL }}
 
     steps:
       - name: Checkout repository
@@ -16,13 +21,13 @@ jobs:
       - name: Read JSON payload
         id: read_json
         run: |
-          payload=$(cat path/to/your/input.json)
+          payload=$(cat ${{ github.event.inputs.jsonFile }})
           echo "payload<<EOF" >> $GITHUB_ENV
           echo "$payload" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
       - name: Trigger Logic App
         run: |
-          curl -X POST "$LOGIC_APP_URL" \
+          curl -X POST "${{ env.LOGIC_APP_URL }}" \
             -H "Content-Type: application/json" \
-            -d "$payload"
+            -d "${{ env.payload }}"
