@@ -18,16 +18,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Read JSON payload
-        id: read_json
+      - name: Read JSON file and save to payload.json
         run: |
-          payload="$(cat ${{ github.event.inputs.jsonFile }})"
-          echo "payload<<EOF" >> $GITHUB_ENV
-          echo "$payload" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          cp "${{ github.event.inputs.jsonFile }}" payload.json
 
       - name: Trigger Logic App
         run: |
-          curl -X POST "${{ env.ONBOARDING_BATCH_LOGIC_APP_DEV_URL }}" \
+          curl -X POST "${ONBOARDING_BATCH_LOGIC_APP_DEV_URL}" \
             -H "Content-Type: application/json" \
-            -d "${{ env.payload }}"
+            -d @payload.json
