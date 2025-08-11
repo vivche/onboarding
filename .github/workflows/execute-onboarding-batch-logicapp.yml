@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       jsonFile:
-        description: 'Path to the JSON file inside the input folder
+        description: 'Path to the JSON file inside the input folder'
         required: true
         default: 'inputs/sample.json'
 
