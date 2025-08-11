@@ -21,7 +21,7 @@ jobs:
       - name: Read JSON payload
         id: read_json
         run: |
-          payload=$(cat ${{ github.event.inputs.jsonFile }})
+          payload="$(cat ${{ github.event.inputs.jsonFile }})"
           echo "payload<<EOF" >> $GITHUB_ENV
           echo "$payload" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
