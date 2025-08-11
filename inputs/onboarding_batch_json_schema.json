@@ -1,0 +1,294 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "storeIdentifier": {
+        "type": "string"
+      },
+      "spanTypes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "SpanType": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "SpanType"
+          ]
+        }
+      },
+      "spanTimeConfigurations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "SpanTypeId": {
+              "type": "integer"
+            },
+            "SiteId": {
+              "type": "integer"
+            },
+            "StartTime": {
+              "type": "string"
+            },
+            "DurationInSeconds": {
+              "type": "integer"
+            },
+            "StartOn": {
+              "type": "string"
+            },
+            "ExpiryOn": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "SpanTypeId",
+            "SiteId",
+            "StartTime",
+            "DurationInSeconds",
+            "StartOn",
+            "ExpiryOn"
+          ]
+        }
+      },
+      "globalConfigKeys": {
+        "type": "object",
+        "properties": {
+          "keys": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "scope",
+                "name",
+                "value"
+              ]
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "scope",
+                "name",
+                "value"
+              ]
+            }
+          }
+        }
+      },
+      "brandConfigKeys": {
+        "type": "object",
+        "properties": {
+          "keys": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "scope",
+                "name",
+                "value"
+              ]
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "scope",
+                "name",
+                "value"
+              ]
+            }
+          }
+        }
+      },
+      "accountConfigKeys": {
+        "type": "object",
+        "properties": {
+          "keys": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "scope",
+                "name",
+                "value"
+              ]
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "scope",
+                "name",
+                "value"
+              ]
+            }
+          }
+        }
+      },
+      "siteConfigKeys": {
+        "type": "object",
+        "properties": {
+          "keys": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "scope",
+                "name",
+                "value"
+              ]
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "scope": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "scope",
+                "name",
+                "value"
+              ]
+            }
+          }
+        }
+      },
+      "deleteSiteConfigKeys": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "scope",
+            "name"
+          ]
+        }
+      },
+      "deleteSiteConfigConstraints": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "scope",
+            "name"
+          ]
+        }
+      }
+    },
+    "required": [
+      "storeIdentifier"
+    ]
+  }
+}

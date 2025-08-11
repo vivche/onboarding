@@ -2,157 +2,6 @@
     "definition": {
         "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
         "actions": {
-            "Check_Engineer_Team_Readiness": {
-                "type": "Scope",
-                "actions": {
-                    "Post_request_msg_to_engineer_team": {
-                        "type": "ApiConnectionWebhook",
-                        "inputs": {
-                            "host": {
-                                "connection": {
-                                    "referenceName": "teams"
-                                }
-                            },
-                            "body": {
-                                "notificationUrl": "@listCallbackUrl()",
-                                "body": {
-                                    "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"ColumnSet\",\n      \"columns\": [\n        {\n          \"type\": \"Column\",\n          \"width\": \"auto\",\n          \"items\": [\n            {\n              \"type\": \"TextBlock\",\n              \"text\": \"📝\",\n              \"size\": \"Medium\",\n              \"weight\": \"Bolder\",\n              \"spacing\": \"None\"\n            }\n          ]\n        },\n        {\n          \"type\": \"Column\",\n          \"width\": \"stretch\",\n          \"items\": [\n            {\n              \"type\": \"TextBlock\",\n              \"text\": \"Onboarding Checklist: Engineer Team\",\n              \"weight\": \"Bolder\",\n              \"size\": \"Medium\",\n              \"wrap\": true\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Store: @{variables('storeName')}\",\n      \"spacing\": \"None\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Please review the steps below and respond.\",\n      \"wrap\": true,\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"@{variables('engineerTeamChecklist')}\",\n      \"wrap\": true,\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"Input.Text\",\n      \"id\": \"comments\",\n      \"placeholder\": \"Comments or blockers\",\n      \"isMultiline\": false\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Have you verified everything according to the checklist above?\",\n      \"wrap\": true,\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Medium\"\n    }\n  ],\n  \"actions\": [\n    {\n      \"type\": \"Action.Submit\",\n      \"title\": \"Yes\",\n      \"data\": {\n        \"action\": \"yes\"\n      }\n    },\n    {\n      \"type\": \"Action.Submit\",\n      \"title\": \"No\",\n      \"data\": {\n        \"action\": \"no\"\n      }\n    }\n  ]\n}\n",
-                                    "recipient": {
-                                        "groupId": "@parameters('TeamsGroupId')",
-                                        "channelId": "@parameters('TeamsChannelId')"
-                                    }
-                                }
-                            },
-                            "path": "/v1.0/teams/conversation/gatherinput/poster/Flow bot/location/@{encodeURIComponent('Channel')}/$subscriptions",
-                            "retryPolicy": {
-                                "type": "fixed",
-                                "count": 5,
-                                "interval": "PT10M"
-                            }
-                        },
-                        "limit": {
-                            "timeout": "P3M"
-                        }
-                    },
-                    "Did_user_clicks_exit": {
-                        "type": "If",
-                        "expression": {
-                            "and": [
-                                {
-                                    "equals": [
-                                        "@\r\nequals(body('Post_request_msg_to_engineer_team')?['data']?['action'], 'yes')\r\n",
-                                        "@true"
-                                    ]
-                                }
-                            ]
-                        },
-                        "actions": {
-                            "Update_request_msg_to_engineer_team_card_for_yes": {
-                                "type": "ApiConnection",
-                                "inputs": {
-                                    "host": {
-                                        "connection": {
-                                            "referenceName": "teams"
-                                        }
-                                    },
-                                    "method": "post",
-                                    "body": {
-                                        "messageId": "@body('Post_request_msg_to_engineer_team')['messageId']",
-                                        "recipient": {
-                                            "groupId": "@parameters('TeamsGroupId')",
-                                            "channelId": "@parameters('TeamsChannelId')"
-                                        },
-                                        "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"ColumnSet\",\n      \"columns\": [\n        {\n          \"type\": \"Column\",\n          \"width\": \"auto\",\n          \"items\": [\n            {\n              \"type\": \"TextBlock\",\n              \"text\": \"📝\",\n              \"size\": \"Medium\",\n              \"weight\": \"Bolder\",\n              \"spacing\": \"None\"\n            }\n          ]\n        },\n        {\n          \"type\": \"Column\",\n          \"width\": \"stretch\",\n          \"items\": [\n            {\n              \"type\": \"TextBlock\",\n              \"text\": \"Onboarding Checklist: Engineer Team\",\n              \"weight\": \"Bolder\",\n              \"size\": \"Medium\",\n              \"wrap\": true\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Store: @{variables('storeName')}\",\n      \"spacing\": \"None\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Checklist:\",\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"@{variables('engineerTeamChecklist')}\",\n      \"wrap\": true,\n      \"spacing\": \"None\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Response:\",\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"Completed\",\n          \"value\": \"@{body('Post_request_msg_to_engineer_team')?['data']?['action']}\"\n        },\n        {\n          \"title\": \"Comments\",\n          \"value\": \"@{body('Post_request_msg_to_engineer_team')?['data']?['comments']}\"\n        }\n      ]\n    }\n  ],\n  \"actions\": [],\n  \"version\": \"1.4\"\n}"
-                                    },
-                                    "path": "/v1.0/teams/conversation/updateAdaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                                }
-                            }
-                        },
-                        "else": {
-                            "actions": {
-                                "Terminate_1": {
-                                    "type": "Terminate",
-                                    "inputs": {
-                                        "runStatus": "Failed",
-                                        "runError": {
-                                            "message": "User did not complete verify the checklist"
-                                        }
-                                    },
-                                    "runAfter": {
-                                        "Update_request_msg_to_engineer_team_card_for_no": [
-                                            "SUCCEEDED"
-                                        ]
-                                    }
-                                },
-                                "Update_request_msg_to_engineer_team_card_for_no": {
-                                    "type": "ApiConnection",
-                                    "inputs": {
-                                        "host": {
-                                            "connection": {
-                                                "referenceName": "teams"
-                                            }
-                                        },
-                                        "method": "post",
-                                        "body": {
-                                            "messageId": "@body('Post_request_msg_to_engineer_team')['messageId']",
-                                            "recipient": {
-                                                "groupId": "@parameters('TeamsGroupId')",
-                                                "channelId": "@parameters('TeamsChannelId')"
-                                            },
-                                            "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"ColumnSet\",\n      \"columns\": [\n        {\n          \"type\": \"Column\",\n          \"width\": \"auto\",\n          \"items\": [\n            {\n              \"type\": \"TextBlock\",\n              \"text\": \"📝\",\n              \"size\": \"Medium\",\n              \"weight\": \"Bolder\",\n              \"spacing\": \"None\"\n            }\n          ]\n        },\n        {\n          \"type\": \"Column\",\n          \"width\": \"stretch\",\n          \"items\": [\n            {\n              \"type\": \"TextBlock\",\n              \"text\": \"Onboarding Checklist: Engineer Team\",\n              \"weight\": \"Bolder\",\n              \"size\": \"Medium\",\n              \"wrap\": true\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Store: @{variables('storeName')}\",\n      \"spacing\": \"None\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Checklist:\",\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"@{variables('engineerTeamChecklist')}\",\n      \"wrap\": true,\n      \"spacing\": \"None\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Response:\",\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"Completed\",\n          \"value\": \"@{body('Post_request_msg_to_engineer_team')?['data']?['action']}\"\n        },\n        {\n          \"title\": \"Comments\",\n          \"value\": \"@{body('Post_request_msg_to_engineer_team')?['data']?['comments']}\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"⚠️ The system will exit, but you can always return later to restart the onboarding process when you're ready.\",\n      \"wrap\": true,\n      \"color\": \"Attention\",\n      \"spacing\": \"Medium\"\n    }\n  ],\n  \"actions\": [],\n  \"version\": \"1.4\"\n}"
-                                        },
-                                        "path": "/v1.0/teams/conversation/updateAdaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                                    }
-                                }
-                            }
-                        },
-                        "runAfter": {
-                            "Post_request_msg_to_engineer_team": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    }
-                },
-                "runAfter": {
-                    "Introduction": [
-                        "SUCCEEDED"
-                    ]
-                }
-            },
-            "Initialize_engineerTeamReady": {
-                "type": "InitializeVariable",
-                "inputs": {
-                    "variables": [
-                        {
-                            "name": "engineerTeamReady",
-                            "type": "boolean",
-                            "value": false
-                        }
-                    ]
-                },
-                "runAfter": {
-                    "Initialize_engineerTeamChecklist": [
-                        "SUCCEEDED"
-                    ]
-                }
-            },
-            "Initialize_engineerTeamChecklist": {
-                "type": "InitializeVariable",
-                "inputs": {
-                    "variables": [
-                        {
-                            "name": "engineerTeamChecklist",
-                            "type": "string",
-                            "value": "1. Verify CDM setup, including:\n    a. Brand, Franchise, and Site\n    b. Users\n    c. Locations\n    d. Are users aligned with correct locations?\n     e. Are demo users aligned with the correct locations?"
-                        }
-                    ]
-                },
-                "runAfter": {
-                    "Initialize_storeName": [
-                        "SUCCEEDED"
-                    ]
-                }
-            },
             "Initialize_storeName": {
                 "type": "InitializeVariable",
                 "inputs": {
@@ -163,1029 +12,8 @@
                         }
                     ]
                 },
-                "runAfter": {}
-            },
-            "Introduction": {
-                "type": "Scope",
-                "actions": {
-                    "Post_introduction": {
-                        "type": "ApiConnectionWebhook",
-                        "inputs": {
-                            "host": {
-                                "connection": {
-                                    "referenceName": "teams"
-                                }
-                            },
-                            "body": {
-                                "notificationUrl": "@listCallbackUrl()",
-                                "body": {
-                                    "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🏪 New Store Onboarding\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"This Logic App will guide you through the onboarding process for a new store.\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"✅ Steps include:\",\n      \"wrap\": true,\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"1. Confirm you've completed the pre-onboarding checklist.\\n2. Provide required configuration details.\\n3. Automatically trigger REST API calls to finalize setup.\",\n      \"wrap\": true,\n      \"spacing\": \"None\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Please enter the name of the new store to begin:\",\n      \"wrap\": true,\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"Input.Text\",\n      \"id\": \"storeName\",\n      \"placeholder\": \"e.g., Wendy\"\n    }\n  ],\n  \"actions\": [\n    {\n      \"type\": \"Action.Submit\",\n      \"title\": \"🚀 Start Onboarding\",\n      \"data\": {\n        \"action\": \"startOnboarding\"\n      }\n    }\n  ]\n}\n",
-                                    "recipient": {
-                                        "groupId": "@parameters('TeamsGroupId')",
-                                        "channelId": "@parameters('TeamsChannelId')"
-                                    }
-                                }
-                            },
-                            "path": "/v1.0/teams/conversation/gatherinput/poster/Flow bot/location/@{encodeURIComponent('Channel')}/$subscriptions"
-                        }
-                    },
-                    "Set_storeName": {
-                        "type": "SetVariable",
-                        "inputs": {
-                            "name": "storeName",
-                            "value": "@body('Post_introduction')?['data']?['storeName']"
-                        },
-                        "runAfter": {
-                            "Update_introduction_card": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
-                    "Update_introduction_card": {
-                        "type": "ApiConnection",
-                        "inputs": {
-                            "host": {
-                                "connection": {
-                                    "referenceName": "teams"
-                                }
-                            },
-                            "method": "post",
-                            "body": {
-                                "messageId": "@body('Post_introduction')['messageId']",
-                                "recipient": {
-                                    "groupId": "@parameters('TeamsGroupId')",
-                                    "channelId": "@parameters('TeamsChannelId')"
-                                },
-                                "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🏪 New Store Onboarding\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"This Logic App will guide you through the onboarding process for a new store.\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"✅ Steps include:\",\n      \"wrap\": true,\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"1. Confirm you've completed the pre-onboarding checklist.\\n2. Provide required configuration details.\\n3. Automatically trigger REST API calls to finalize setup.\",\n      \"wrap\": true,\n      \"spacing\": \"None\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Please enter the name of the new store to begin:\",\n      \"wrap\": true,\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"Store Name\",\n          \"value\": \"@{body('Post_introduction')?['data']?['storeName']}\"\n        }\n       ]\n     }\n  ]\n}"
-                            },
-                            "path": "/v1.0/teams/conversation/updateAdaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                        },
-                        "runAfter": {
-                            "Post_introduction": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    }
-                },
                 "runAfter": {
-                    "Initialize_contextPointName": [
-                        "SUCCEEDED"
-                    ]
-                }
-            },
-            "Retrieve_Secrets,_Get_Token_for_E3D_APIs": {
-                "type": "Scope",
-                "actions": {
-                    "Get_secret_e3d-api-clientid-q_from_kv": {
-                        "type": "ServiceProvider",
-                        "inputs": {
-                            "parameters": {
-                                "secretName": "e3d-api-clientid-q"
-                            },
-                            "serviceProviderConfiguration": {
-                                "connectionName": "keyVault",
-                                "operationId": "getSecret",
-                                "serviceProviderId": "/serviceProviders/keyVault"
-                            }
-                        },
-                        "runtimeConfiguration": {
-                            "secureData": {
-                                "properties": [
-                                    "inputs",
-                                    "outputs"
-                                ]
-                            }
-                        }
-                    },
-                    "Get_secret_e3d-api-secret-q_from_kv": {
-                        "type": "ServiceProvider",
-                        "inputs": {
-                            "parameters": {
-                                "secretName": "e3d-api-secret-q"
-                            },
-                            "serviceProviderConfiguration": {
-                                "connectionName": "keyVault",
-                                "operationId": "getSecret",
-                                "serviceProviderId": "/serviceProviders/keyVault"
-                            }
-                        },
-                        "runAfter": {
-                            "Get_secret_e3d-api-clientid-q_from_kv": [
-                                "SUCCEEDED"
-                            ]
-                        },
-                        "runtimeConfiguration": {
-                            "secureData": {
-                                "properties": [
-                                    "inputs",
-                                    "outputs"
-                                ]
-                            }
-                        }
-                    },
-                    "HTTP_-_Get_token_for_E3D_APIs": {
-                        "type": "Http",
-                        "inputs": {
-                            "uri": "@concat('https://login.microsoftonline.com/', parameters('E3DTenantId'), '/oauth2/v2.0/token')",
-                            "method": "POST",
-                            "headers": {
-                                "Content-Type": "application/x-www-form-urlencoded"
-                            },
-                            "body": "client_id=@{body('Get_secret_e3d-api-clientid-q_from_kv')?['value']}&client_secret=@{body('Get_secret_e3d-api-secret-q_from_kv')?['value']}&scope=@{concat('https://wintersnowb2c.onmicrosoft.com/', body('Get_secret_e3d-api-clientid-q_from_kv')?['value'], '/.default')\r\n}&grant_type=client_credentials\n"
-                        },
-                        "runAfter": {
-                            "Get_secret_e3d-api-secret-q_from_kv": [
-                                "SUCCEEDED"
-                            ]
-                        },
-                        "runtimeConfiguration": {
-                            "contentTransfer": {
-                                "transferMode": "Chunked"
-                            },
-                            "secureData": {
-                                "properties": [
-                                    "inputs",
-                                    "outputs"
-                                ]
-                            }
-                        }
-                    }
-                },
-                "runAfter": {
-                    "Request_Store_Identifier": [
-                        "SUCCEEDED"
-                    ]
-                }
-            },
-            "Get_Context_Point": {
-                "type": "Scope",
-                "actions": {
-                    "HTTP_-_GetContextPoint": {
-                        "type": "Http",
-                        "inputs": {
-                            "uri": "@parameters('E3DAliasService-GetContextPoint')",
-                            "method": "GET",
-                            "headers": {
-                                "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
-                                "Content-Type": "application/json"
-                            },
-                            "queries": {
-                                "identifier": "@{body('Request_for_store_identifier')?['data']?['storeIdentifier']}"
-                            }
-                        },
-                        "runtimeConfiguration": {
-                            "contentTransfer": {
-                                "transferMode": "Chunked"
-                            }
-                        }
-                    },
-                    "Post_GetContextPoint_Result": {
-                        "type": "ApiConnection",
-                        "inputs": {
-                            "host": {
-                                "connection": {
-                                    "referenceName": "teams"
-                                }
-                            },
-                            "method": "post",
-                            "body": {
-                                "recipient": {
-                                    "groupId": "@parameters('TeamsGroupId')",
-                                    "channelId": "@parameters('TeamsChannelId')"
-                                },
-                                "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"📍 Get Context Point Result\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Store: @{variables('storeName')}\",\n      \"spacing\": \"None\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"Status Code:\",\n          \"value\": \"@{outputs('HTTP_-_GetContextPoint')?['statusCode']}\"\n        },\n        {\n          \"title\": \"Context Point ID:\",\n          \"value\": \"@{body('HTTP_-_GetContextPoint')?['contextPointId']}\"\n        },\n        {\n          \"title\": \"Context Point Name:\",\n          \"value\": \"@{body('HTTP_-_GetContextPoint')?['contextPointName']}\"\n        },\n        {\n          \"title\": \"Identifiers:\",\n          \"value\": \"@{join(body('HTTP_-_GetContextPoint')?['identifiers'], '\n')}\"\n        }\n      ]\n    }\n  ]\n}"
-                            },
-                            "path": "/v1.0/teams/conversation/adaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                        },
-                        "runAfter": {
-                            "Set_contextPointId": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
-                    "Set_contextPointId": {
-                        "type": "SetVariable",
-                        "inputs": {
-                            "name": "contextPointId",
-                            "value": "@body('HTTP_-_GetContextPoint')?['contextPointId']"
-                        },
-                        "runAfter": {
-                            "HTTP_-_GetContextPoint": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    }
-                },
-                "runAfter": {
-                    "Retrieve_Secrets,_Get_Token_for_E3D_APIs": [
-                        "SUCCEEDED"
-                    ]
-                }
-            },
-            "Request_Store_Identifier": {
-                "type": "Scope",
-                "actions": {
-                    "Request_for_store_identifier": {
-                        "type": "ApiConnectionWebhook",
-                        "inputs": {
-                            "host": {
-                                "connection": {
-                                    "referenceName": "teams"
-                                }
-                            },
-                            "body": {
-                                "notificationUrl": "@listCallbackUrl()",
-                                "body": {
-                                    "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🚦 Configuration Approval Needed\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🔧 **Next Steps:**\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"1. Verify that the E3D dev instance has a Context Point for the brand, franchise, and site.\\n2. Create the aliases in E3D dev (e.g., `CKE||SDC|1100083`).\",\n      \"wrap\": true,\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"The system needs your approval to proceed.\",\n      \"wrap\": true,\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"Input.Text\",\n      \"id\": \"storeIdentifier\",\n      \"label\": \"New Store Identifier (ex. CKE||SDC|1100083)\",\n      \"placeholder\": \"Enter new store identifier (only if approve)\",\n      \"value\": \"\"\n    }\n  ],\n  \"actions\": [\n    {\n      \"type\": \"Action.Submit\",\n      \"title\": \"✅ Approve\",\n      \"data\": {\n        \"action\": \"approved\"\n      }\n    },\n    {\n      \"type\": \"Action.Submit\",\n      \"title\": \"❌ Reject\",\n      \"data\": {\n        \"action\": \"rejected\"\n      }\n    }\n  ]\n}",
-                                    "recipient": {
-                                        "groupId": "@parameters('TeamsGroupId')",
-                                        "channelId": "@parameters('TeamsChannelId')"
-                                    }
-                                }
-                            },
-                            "path": "/v1.0/teams/conversation/gatherinput/poster/Flow bot/location/@{encodeURIComponent('Channel')}/$subscriptions"
-                        }
-                    },
-                    "Display_identifier": {
-                        "type": "Compose",
-                        "inputs": "@body('Request_for_store_identifier')?['data']?['storeIdentifier']",
-                        "runAfter": {
-                            "Did_user_click_approve,_reject": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
-                    "Did_user_click_approve,_reject": {
-                        "type": "Switch",
-                        "expression": "@body('Request_for_store_identifier')?['data']?['action']",
-                        "default": {
-                            "actions": {}
-                        },
-                        "cases": {
-                            "Approve": {
-                                "actions": {
-                                    "update_request_store_identifier_card_for_approve": {
-                                        "type": "ApiConnection",
-                                        "inputs": {
-                                            "host": {
-                                                "connection": {
-                                                    "referenceName": "teams"
-                                                }
-                                            },
-                                            "method": "post",
-                                            "body": {
-                                                "messageId": "@body('Request_for_store_identifier')['messageId']",
-                                                "recipient": {
-                                                    "groupId": "@parameters('TeamsGroupId')",
-                                                    "channelId": "@parameters('TeamsChannelId')"
-                                                },
-                                                "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🚦 Configuration Approval Needed\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🔧 **Next Steps:**\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"1. Verify that the E3D dev instance has a Context Point for the brand, franchise, and site.\\n2. Create the aliases in E3D dev (e.g., `CKE||SDC|1100083`).\",\n      \"wrap\": true,\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"The system needs your approval to proceed.\",\n      \"wrap\": true,\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"New Store Identifier\",\n          \"value\": \"@{body('Request_for_store_identifier')?['data']?['storeIdentifier']}\"\n        },\n        {\n          \"title\": \"Action\",\n          \"value\": \"@{body('Request_for_store_identifier')?['data']?['action']}\"\n        }\n      ]\n    }\n  ]\n}"
-                                            },
-                                            "path": "/v1.0/teams/conversation/updateAdaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                                        }
-                                    }
-                                },
-                                "case": "approved"
-                            },
-                            "Reject": {
-                                "actions": {
-                                    "Terminate_-_cancelled-copy": {
-                                        "type": "Terminate",
-                                        "inputs": {
-                                            "runStatus": "Cancelled"
-                                        },
-                                        "runAfter": {
-                                            "update_request_store_identifier_card_for_reject": [
-                                                "SUCCEEDED"
-                                            ]
-                                        }
-                                    },
-                                    "update_request_store_identifier_card_for_reject": {
-                                        "type": "ApiConnection",
-                                        "inputs": {
-                                            "host": {
-                                                "connection": {
-                                                    "referenceName": "teams"
-                                                }
-                                            },
-                                            "method": "post",
-                                            "body": {
-                                                "messageId": "@body('Request_for_store_identifier')['messageId']",
-                                                "recipient": {
-                                                    "groupId": "@parameters('TeamsGroupId')",
-                                                    "channelId": "@parameters('TeamsChannelId')"
-                                                },
-                                                "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🚦 Configuration Approval Needed\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🔧 **Next Steps:**\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"1. Verify that the E3D dev instance has a Context Point for the brand, franchise, and site.\\n2. Create the aliases in E3D dev (e.g., `CKE||SDC|1100083`).\",\n      \"wrap\": true,\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"The system needs your approval to proceed.\",\n      \"wrap\": true,\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"New Store Identifier\",\n          \"value\": \"@{body('Request_for_store_identifier')?['data']?['storeIdentifier']}\"\n        },\n        {\n          \"title\": \"Action\",\n          \"value\": \"@{body('Request_for_store_identifier')?['data']?['action']}\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"⚠️ The system will exit, but you can always return later to restart the onboarding process when you're ready.\",\n      \"wrap\": true,\n      \"color\": \"Attention\",\n      \"spacing\": \"Medium\"\n    }\n  ]\n}"
-                                            },
-                                            "path": "/v1.0/teams/conversation/updateAdaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                                        }
-                                    }
-                                },
-                                "case": "rejected"
-                            }
-                        },
-                        "runAfter": {
-                            "Request_for_store_identifier": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    }
-                },
-                "runAfter": {
-                    "Check_Engineer_Team_Readiness": [
-                        "SUCCEEDED"
-                    ]
-                }
-            },
-            "Upsert_Context_Point_Alias": {
-                "type": "Scope",
-                "actions": {
-                    "HTTP_-_UpsertContextPointAlias": {
-                        "type": "Http",
-                        "inputs": {
-                            "uri": "@parameters('E3DAliasService-UpsertContextPointAlias')",
-                            "method": "POST",
-                            "headers": {
-                                "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
-                                "Content-Type": "application/json"
-                            },
-                            "body": [
-                                {
-                                    "contextPointId": "@body('HTTP_-_GetContextPoint')?['contextPointId']",
-                                    "alias": "@body('Request_for_store_identifier')?['data']?['storeIdentifier']"
-                                }
-                            ]
-                        },
-                        "runtimeConfiguration": {
-                            "contentTransfer": {
-                                "transferMode": "Chunked"
-                            }
-                        }
-                    },
-                    "Post_UpsertContextPoint_Result": {
-                        "type": "ApiConnection",
-                        "inputs": {
-                            "host": {
-                                "connection": {
-                                    "referenceName": "teams"
-                                }
-                            },
-                            "method": "post",
-                            "body": {
-                                "recipient": {
-                                    "groupId": "@parameters('TeamsGroupId')",
-                                    "channelId": "@parameters('TeamsChannelId')"
-                                },
-                                "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"📍 Upsert Context Point Alias Result\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Store: @{variables('storeName')}\",\n      \"spacing\": \"None\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"Status Code:\",\n          \"value\": \"@{outputs('HTTP_-_UpsertContextPointAlias')?['statusCode']}\"\n        }\n      ]\n    }\n  ]\n}"
-                            },
-                            "path": "/v1.0/teams/conversation/adaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                        },
-                        "runAfter": {
-                            "HTTP_-_UpsertContextPointAlias": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    }
-                },
-                "runAfter": {
-                    "Get_CVOC_Hierarchy_With_Aliases": [
-                        "SUCCEEDED"
-                    ]
-                }
-            },
-            "Request_Span_Type_and_Time_Configuration": {
-                "type": "Scope",
-                "actions": {
-                    "Request_for_span_type_and_time_configuration": {
-                        "type": "ApiConnectionWebhook",
-                        "inputs": {
-                            "host": {
-                                "connection": {
-                                    "referenceName": "teams"
-                                }
-                            },
-                            "body": {
-                                "notificationUrl": "@listCallbackUrl()",
-                                "body": {
-                                    "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🚦 Dayparts as Spans Configuration\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🔧 **Next Steps:**\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"1. Apply dayparts as Spans in E3D.\",\n      \"wrap\": true,\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Please enter the day parts span time configuration in **valid JSON format**. Example:\",\n      \"wrap\": true,\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"[\\n  {\\n    \\\"SpanTypeId\\\": 0,\\n    \\\"SiteId\\\": 0,\\n    \\\"StartTime\\\": \\\"string\\\",\\n    \\\"DurationInSeconds\\\": 0,\\n    \\\"StartOn\\\": \\\"2025-07-31\\\",\\n    \\\"ExpiryOn\\\": \\\"2025-07-31\\\"\\n  }\\n]\",\n      \"wrap\": true,\n      \"spacing\": \"None\",\n      \"fontType\": \"Monospace\"\n    },\n    {\n      \"type\": \"Input.Text\",\n      \"id\": \"configuration\",\n      \"label\": \"Day Parts Span Configuration\",\n      \"placeholder\": \"Paste your JSON configuration here...\",\n      \"isMultiline\": true,\n      \"value\": \"\"\n    }\n  ],\n  \"actions\": [\n    {\n      \"type\": \"Action.Submit\",\n      \"title\": \"📤 Submit\",\n      \"data\": {\n        \"action\": \"submit\"\n      }\n    },\n    {\n      \"type\": \"Action.Submit\",\n      \"title\": \"⏭️ Skip\",\n      \"data\": {\n        \"action\": \"skipped\"\n      }\n    },\n    {\n      \"type\": \"Action.Submit\",\n      \"title\": \"🚪 Exit\",\n      \"data\": {\n        \"action\": \"exit\"\n      }\n    }\n  ]\n}",
-                                    "recipient": {
-                                        "groupId": "@parameters('TeamsGroupId')",
-                                        "channelId": "@parameters('TeamsChannelId')"
-                                    }
-                                }
-                            },
-                            "path": "/v1.0/teams/conversation/gatherinput/poster/Flow bot/location/@{encodeURIComponent('Channel')}/$subscriptions"
-                        }
-                    },
-                    "Did_user_click_submit_or_skip_or_exit": {
-                        "type": "Switch",
-                        "expression": "@body('Request_for_span_type_and_time_configuration')?['data']?['action']",
-                        "default": {
-                            "actions": {}
-                        },
-                        "cases": {
-                            "Submit": {
-                                "actions": {
-                                    "Update_for_span_type_and_time_configuration_card_for_submit": {
-                                        "type": "ApiConnection",
-                                        "inputs": {
-                                            "host": {
-                                                "connection": {
-                                                    "referenceName": "teams"
-                                                }
-                                            },
-                                            "method": "post",
-                                            "body": {
-                                                "messageId": "@body('Request_for_span_type_and_time_configuration')['messageId']",
-                                                "recipient": {
-                                                    "groupId": "@parameters('TeamsGroupId')",
-                                                    "channelId": "@parameters('TeamsChannelId')"
-                                                },
-                                                "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🚦 Dayparts as Spans Configuration\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🔧 **Next Steps:**\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"1. Apply dayparts as Spans in E3D.\",\n      \"wrap\": true,\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Please enter the day parts span time configuration in **valid JSON format**. Example:\",\n      \"wrap\": true,\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"[{\\n  \\\"SpanTypeId\\\": 0,\\n  \\\"SiteId\\\": 0,\\n  \\\"StartTime\\\": \\\"string\\\",\\n  \\\"DurationInSeconds\\\": 0,\\n  \\\"StartOn\\\": \\\"2025-07-31\\\",\\n  \\\"ExpiryOn\\\": \\\"2025-07-31\\\"\\n}]\",\n      \"wrap\": true,\n      \"spacing\": \"Small\",\n      \"fontType\": \"Monospace\"\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"Day Parts Span Configuration\",\n          \"value\": \"@{variables('spanTimeConfigJson')}\"\n        },\n        {\n          \"title\": \"Action\",\n          \"value\": \"@{body('Request_for_span_type_and_time_configuration')?['data']?['action']}\"\n        }\n      ]\n    }\n  ]\n}\n"
-                                            },
-                                            "path": "/v1.0/teams/conversation/updateAdaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                                        },
-                                        "runAfter": {
-                                            "Set_spanTimeConfigJson": [
-                                                "SUCCEEDED"
-                                            ]
-                                        }
-                                    },
-                                    "Set_spanTimeConfigJson": {
-                                        "type": "SetVariable",
-                                        "inputs": {
-                                            "name": "spanTimeConfigJson",
-                                            "value": "@replace(replace(replace(body('Request_for_span_type_and_time_configuration')?['data']?['configuration'], '\"', '\\\"'), '\n', '\\n'), '\r', '')"
-                                        }
-                                    }
-                                },
-                                "case": "submit"
-                            },
-                            "Skip": {
-                                "actions": {
-                                    "Update_for_span_type_and_time_configuration_card_for_skip": {
-                                        "type": "ApiConnection",
-                                        "inputs": {
-                                            "host": {
-                                                "connection": {
-                                                    "referenceName": "teams"
-                                                }
-                                            },
-                                            "method": "post",
-                                            "body": {
-                                                "messageId": "@body('Request_for_span_type_and_time_configuration')['messageId']",
-                                                "recipient": {
-                                                    "groupId": "@parameters('TeamsGroupId')",
-                                                    "channelId": "@parameters('TeamsChannelId')"
-                                                },
-                                                "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🚦 Dayparts as Spans Configuration\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🔧 **Next Steps:**\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"1. Apply dayparts as Spans in E3D.\",\n      \"wrap\": true,\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"The system needs your approval to proceed.\",\n      \"wrap\": true,\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"Day Parts Span Configuration\",\n          \"value\": \"\"\n        },\n        {\n          \"title\": \"Action\",\n          \"value\": \"@{body('Request_for_span_type_and_time_configuration')?['data']?['action']}\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"⚠️ The system will continue to the next onboarding step\",\n      \"wrap\": true,\n      \"color\": \"Attention\",\n      \"spacing\": \"Medium\"\n    }\n  ]\n}"
-                                            },
-                                            "path": "/v1.0/teams/conversation/updateAdaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                                        }
-                                    }
-                                },
-                                "case": "skipped"
-                            },
-                            "Exit_1": {
-                                "actions": {
-                                    "Terminate_-_cancelled_1": {
-                                        "type": "Terminate",
-                                        "inputs": {
-                                            "runStatus": "Cancelled"
-                                        },
-                                        "runAfter": {
-                                            "Update_for_span_type_and_time_configuration_card_for_exit": [
-                                                "SUCCEEDED"
-                                            ]
-                                        }
-                                    },
-                                    "Update_for_span_type_and_time_configuration_card_for_exit": {
-                                        "type": "ApiConnection",
-                                        "inputs": {
-                                            "host": {
-                                                "connection": {
-                                                    "referenceName": "teams"
-                                                }
-                                            },
-                                            "method": "post",
-                                            "body": {
-                                                "messageId": "@body('Request_for_span_type_and_time_configuration')['messageId']",
-                                                "recipient": {
-                                                    "groupId": "@parameters('TeamsGroupId')",
-                                                    "channelId": "@parameters('TeamsChannelId')"
-                                                },
-                                                "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🚦 Dayparts as Spans Configuration\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🔧 **Next Steps:**\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"1. Apply dayparts as Spans in E3D.\",\n      \"wrap\": true,\n      \"spacing\": \"Small\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"The system needs your approval to proceed.\",\n      \"wrap\": true,\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"Day Parts Span Configuration\",\n          \"value\": \"\"\n        },\n        {\n          \"title\": \"Action\",\n          \"value\": \"@{body('Request_for_span_type_and_time_configuration')?['data']?['action']}\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"⚠️ The system will exit, but you can always return later to restart the onboarding process when you're ready.\",\n      \"wrap\": true,\n      \"color\": \"Attention\",\n      \"spacing\": \"Medium\"\n    }\n  ]\n}"
-                                            },
-                                            "path": "/v1.0/teams/conversation/updateAdaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                                        }
-                                    }
-                                },
-                                "case": "exit"
-                            }
-                        },
-                        "runAfter": {
-                            "Request_for_span_type_and_time_configuration": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    }
-                },
-                "runAfter": {
-                    "Upsert_Context_Point_Alias": [
-                        "SUCCEEDED"
-                    ]
-                }
-            },
-            "Did_user_clicks_skip": {
-                "type": "If",
-                "expression": {
-                    "and": [
-                        {
-                            "not": {
-                                "equals": [
-                                    "@equals(body('Request_for_span_type_and_time_configuration')?['data']?['action'], 'skipped')",
-                                    "@true"
-                                ]
-                            }
-                        }
-                    ]
-                },
-                "actions": {
-                    "(For_debugging_only)_Get_Span_Time_Configurations": {
-                        "type": "Scope",
-                        "actions": {
-                            "HTTP_-_GetSpanTimeConfigurations_all": {
-                                "type": "Http",
-                                "inputs": {
-                                    "uri": "@parameters('E3DSpanService-GetSpanTimeConfigurations')",
-                                    "method": "GET",
-                                    "headers": {
-                                        "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
-                                        "Content-Type": "application/json"
-                                    },
-                                    "queries": {
-                                        "siteId": "@{body('HTTP_-_GetContextPoint')?['contextPointId']}"
-                                    }
-                                },
-                                "runtimeConfiguration": {
-                                    "contentTransfer": {
-                                        "transferMode": "Chunked"
-                                    }
-                                }
-                            },
-                            "Build_array_2": {
-                                "type": "Select",
-                                "inputs": {
-                                    "from": "@body('HTTP_-_GetSpanTimeConfigurations_all')",
-                                    "select": {
-                                        "SpanConfigId": "@item()?['SpanConfigId']",
-                                        "SpanTypeId": "@item()?['SpanTypeId']",
-                                        "SpanType": "@item()?['SpanType']",
-                                        "SiteId": "@item()?['SiteId']",
-                                        "StartTime": "@item()?['StartTime']",
-                                        "DurationInSeconds": "@item()?['DurationInSeconds']",
-                                        "StartOn": "@item()?['StartOn']",
-                                        "ExpriryOn": "@item()?['ExpiryOn']",
-                                        "UpdatedBy": "@item()?['UpdatedBy']",
-                                        "UpdatedOn": "@item()?['UpdatedOn']"
-                                    }
-                                },
-                                "runAfter": {
-                                    "Parse_JSON_-_GetSpanTimeConfigurations": [
-                                        "SUCCEEDED"
-                                    ]
-                                }
-                            },
-                            "Parse_JSON_-_GetSpanTimeConfigurations": {
-                                "type": "ParseJson",
-                                "inputs": {
-                                    "content": "@body('HTTP_-_GetSpanTimeConfigurations_all')",
-                                    "schema": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "object",
-                                            "properties": {
-                                                "SpanConfigId": {
-                                                    "type": "integer"
-                                                },
-                                                "SpanTypeId": {
-                                                    "type": "integer"
-                                                },
-                                                "SpanType": {
-                                                    "type": "string"
-                                                },
-                                                "SiteId": {
-                                                    "type": "integer"
-                                                },
-                                                "StartTime": {
-                                                    "type": "string"
-                                                },
-                                                "DurationInSeconds": {
-                                                    "type": "integer"
-                                                },
-                                                "StartOn": {
-                                                    "type": "string"
-                                                },
-                                                "ExpiryOn": {
-                                                    "type": "string"
-                                                },
-                                                "UpdatedBy": {
-                                                    "type": "integer"
-                                                },
-                                                "UpdatedOn": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": [
-                                                "SpanConfigId",
-                                                "SpanTypeId",
-                                                "SpanType",
-                                                "SiteId",
-                                                "StartTime",
-                                                "DurationInSeconds",
-                                                "StartOn",
-                                                "ExpiryOn",
-                                                "UpdatedBy",
-                                                "UpdatedOn"
-                                            ]
-                                        }
-                                    }
-                                },
-                                "runAfter": {
-                                    "HTTP_-_GetSpanTimeConfigurations_all": [
-                                        "SUCCEEDED"
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    "Upsert_Span_Time_Configurations.__(TODO)_may_need_to_look_through_each_span": {
-                        "type": "Scope",
-                        "actions": {
-                            "HTTP_-_UpsertSpanTimeConfigurations": {
-                                "type": "Http",
-                                "inputs": {
-                                    "uri": "@parameters('E3DSpanService-UpsertSpanTimeConfigurations')",
-                                    "method": "POST",
-                                    "headers": {
-                                        "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
-                                        "Content-Type": "application/json"
-                                    },
-                                    "body": "@body('Request_for_span_type_and_time_configuration')?['data']?['configuration']"
-                                },
-                                "runtimeConfiguration": {
-                                    "contentTransfer": {
-                                        "transferMode": "Chunked"
-                                    }
-                                }
-                            },
-                            "Post_UpsertSpanTimeConfigurations": {
-                                "type": "ApiConnection",
-                                "inputs": {
-                                    "host": {
-                                        "connection": {
-                                            "referenceName": "teams"
-                                        }
-                                    },
-                                    "method": "post",
-                                    "body": {
-                                        "recipient": {
-                                            "groupId": "@parameters('TeamsGroupId')",
-                                            "channelId": "@parameters('TeamsChannelId')"
-                                        },
-                                        "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"📍 Upsert Span Time Configurations Result\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Store: @{variables('storeName')}\",\n      \"spacing\": \"None\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"Status Code:\",\n          \"value\": \"@{outputs('HTTP_-_UpsertSpanTimeConfigurations')?['statusCode']}\"\n        }\n      ]\n    }\n  ]\n}"
-                                    },
-                                    "path": "/v1.0/teams/conversation/adaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                                },
-                                "runAfter": {
-                                    "HTTP_-_UpsertSpanTimeConfigurations": [
-                                        "SUCCEEDED"
-                                    ]
-                                }
-                            },
-                            "(For_debug_only)_HTTP_-_GetSpanTimeConfigurations_after_upsert": {
-                                "type": "Http",
-                                "inputs": {
-                                    "uri": "@parameters('E3DSpanService-GetSpanTimeConfigurations')",
-                                    "method": "GET",
-                                    "headers": {
-                                        "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
-                                        "Content-Type": "application/json"
-                                    },
-                                    "queries": {
-                                        "siteId": "@{body('HTTP_-_GetContextPoint')?['contextPointId']}",
-                                        "spanTypeId": "15"
-                                    }
-                                },
-                                "runAfter": {
-                                    "Post_UpsertSpanTimeConfigurations": [
-                                        "SUCCEEDED"
-                                    ]
-                                },
-                                "runtimeConfiguration": {
-                                    "contentTransfer": {
-                                        "transferMode": "Chunked"
-                                    }
-                                }
-                            }
-                        },
-                        "runAfter": {
-                            "(TODO)_may_need_to_UpsertSpanType_": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
-                    "(TODO)_may_need_to_UpsertSpanType_": {
-                        "type": "Scope",
-                        "actions": {},
-                        "runAfter": {
-                            "(For_debugging_only)_Get_Span_Time_Configurations": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    }
-                },
-                "else": {
-                    "actions": {}
-                },
-                "runAfter": {
-                    "Request_Span_Type_and_Time_Configuration": [
-                        "SUCCEEDED"
-                    ]
-                }
-            },
-            "Initialize_spanTimeConfigJson": {
-                "type": "InitializeVariable",
-                "inputs": {
-                    "variables": [
-                        {
-                            "name": "spanTimeConfigJson",
-                            "type": "string"
-                        }
-                    ]
-                },
-                "runAfter": {
-                    "Initialize_engineerTeamReady": [
-                        "SUCCEEDED"
-                    ]
-                }
-            },
-            "Post_Config_APIs": {
-                "type": "Scope",
-                "actions": {
-                    "HTTP_api_config_api": {
-                        "type": "Http",
-                        "inputs": {
-                            "uri": "@concat(parameters('ConfigAPI'), '/keys')",
-                            "method": "GET",
-                            "headers": {
-                                "accept": "text/plain"
-                            },
-                            "authentication": {
-                                "type": "ManagedServiceIdentity",
-                                "audience": "api://b90039e1-cf4a-4a69-90cf-2cb4f2b26987"
-                            }
-                        },
-                        "runtimeConfiguration": {
-                            "contentTransfer": {
-                                "transferMode": "Chunked"
-                            }
-                        }
-                    },
-                    "HTTP_api_config_api-copy": {
-                        "type": "Http",
-                        "inputs": {
-                            "uri": "@concat(parameters('ConfigAPI'), '/keys')",
-                            "method": "GET",
-                            "headers": {
-                                "accept": "text/plain"
-                            },
-                            "authentication": {
-                                "type": "ManagedServiceIdentity",
-                                "audience": "api://b90039e1-cf4a-4a69-90cf-2cb4f2b26987"
-                            }
-                        },
-                        "runAfter": {
-                            "HTTP_api_config_api": [
-                                "SUCCEEDED"
-                            ]
-                        },
-                        "runtimeConfiguration": {
-                            "contentTransfer": {
-                                "transferMode": "Chunked"
-                            }
-                        }
-                    }
-                },
-                "runAfter": {
-                    "Request_Config_Configuration": [
-                        "SUCCEEDED"
-                    ]
-                }
-            },
-            "Get_CVOC_Hierarchy_With_Aliases": {
-                "type": "Scope",
-                "actions": {
-                    "HTTP_-_GetCVOCHierarchyWithAliases": {
-                        "type": "Http",
-                        "inputs": {
-                            "uri": "@parameters('E3DSpanService-GetCVOCHierarchyWithAliases')",
-                            "method": "GET",
-                            "headers": {
-                                "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
-                                "Content-Type": "application/json"
-                            },
-                            "queries": {
-                                "contextPointId": "@{variables('contextPointId')}"
-                            }
-                        },
-                        "runtimeConfiguration": {
-                            "contentTransfer": {
-                                "transferMode": "Chunked"
-                            }
-                        }
-                    },
-                    "Post_GetCVOCHierarchyWithAliases": {
-                        "type": "ApiConnection",
-                        "inputs": {
-                            "host": {
-                                "connection": {
-                                    "referenceName": "teams"
-                                }
-                            },
-                            "method": "post",
-                            "body": {
-                                "recipient": {
-                                    "groupId": "@parameters('TeamsGroupId')",
-                                    "channelId": "@parameters('TeamsChannelId')"
-                                },
-                                "messageBody": "\n{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"📍 Get CVOC Hierarchy With Aliases Result\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Store: @{variables('storeName')}\",\n      \"spacing\": \"None\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"Brand ID:\",\n          \"value\": \"@{variables('brandId')}\"\n        },\n        {\n          \"title\": \"Brand Name:\",\n          \"value\": \"@{variables('brandName')}\"\n        },\n        {\n          \"title\": \"Account/Franchise ID:\",\n          \"value\": \"@{variables('accountId')}\"\n        },\n        {\n          \"title\": \"Account/Franchise Name:\",\n          \"value\": \"@{variables('accountName')}\"\n        },\n        {\n          \"title\": \"Context Point ID:\",\n          \"value\": \"@{variables('contextPointId')}\"\n        },\n        {\n          \"title\": \"Context Point Name:\",\n          \"value\": \"@{variables('contextPointName')}\"\n        }\n      ]\n    }\n  ]\n}\n"
-                            },
-                            "path": "/v1.0/teams/conversation/adaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                        },
-                        "runAfter": {
-                            "Set_brandName": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
-                    "Parse_JSON_-_GetCVOCHierarchyWithAliases": {
-                        "type": "ParseJson",
-                        "inputs": {
-                            "content": "@body('HTTP_-_GetCVOCHierarchyWithAliases')",
-                            "schema": {
-                                "type": "array",
-                                "items": {
-                                    "type": "object",
-                                    "properties": {
-                                        "contextPointId": {
-                                            "type": "integer"
-                                        },
-                                        "contextPointName": {
-                                            "type": "string"
-                                        },
-                                        "contextPointType": {
-                                            "type": "string"
-                                        },
-                                        "contextPointSubType": {
-                                            "type": "string"
-                                        },
-                                        "aliasId": {
-                                            "type": "integer"
-                                        },
-                                        "namespace": {
-                                            "type": "string"
-                                        },
-                                        "identifier": {
-                                            "type": "string"
-                                        },
-                                        "parentContextPointId": {
-                                            "type": "integer"
-                                        },
-                                        "parentContextPointName": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "required": [
-                                        "contextPointId",
-                                        "contextPointName",
-                                        "contextPointType",
-                                        "contextPointSubType"
-                                    ]
-                                }
-                            }
-                        },
-                        "runAfter": {
-                            "HTTP_-_GetCVOCHierarchyWithAliases": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
-                    "Build_array": {
-                        "type": "Select",
-                        "inputs": {
-                            "from": "@body('Parse_JSON_-_GetCVOCHierarchyWithAliases')",
-                            "select": {
-                                "parentContextPointId": "@item()?['parentContextPointId']",
-                                "parentContextPointName": "@item()?['parentContextPointName']",
-                                "contextPointId": "@item()?['contextPointId']",
-                                "contextPointName": "@item()?['contextPointName']",
-                                "contextPointSubtype": "@item()?['contextPointSubType']"
-                            }
-                        },
-                        "runAfter": {
-                            "Parse_JSON_-_GetCVOCHierarchyWithAliases": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
-                    "Filter_site": {
-                        "type": "Query",
-                        "inputs": {
-                            "from": "@body('Build_array')",
-                            "where": "@equals(item()?['contextPointId']\r\n, body('HTTP_-_GetContextPoint')?['contextPointId'])"
-                        },
-                        "runAfter": {
-                            "Build_array": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
-                    "Set_accountId": {
-                        "type": "SetVariable",
-                        "inputs": {
-                            "name": "accountId",
-                            "value": "@body('Filter_site')?[0]?['parentContextPointId']"
-                        },
-                        "runAfter": {
-                            "Filter_site": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
-                    "Set_accountName": {
-                        "type": "SetVariable",
-                        "inputs": {
-                            "name": "accountName",
-                            "value": "@body('Filter_site')?[0]?['parentContextPointName']"
-                        },
-                        "runAfter": {
-                            "Set_accountId": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
-                    "Set_contextPointName": {
-                        "type": "SetVariable",
-                        "inputs": {
-                            "name": "contextPointName",
-                            "value": "@body('Filter_site')?[0]?['contextPointName']"
-                        },
-                        "runAfter": {
-                            "Set_accountName": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
-                    "Set_brandId": {
-                        "type": "SetVariable",
-                        "inputs": {
-                            "name": "brandId",
-                            "value": "@body('Filter_CorporateAccount_for_brand')?[0]?['contextPointId']"
-                        },
-                        "runAfter": {
-                            "Filter_CorporateAccount_for_brand": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
-                    "Set_brandName": {
-                        "type": "SetVariable",
-                        "inputs": {
-                            "name": "brandName",
-                            "value": "@body('Filter_CorporateAccount_for_brand')?[0]?['contextPointName']"
-                        },
-                        "runAfter": {
-                            "Set_brandId": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    },
-                    "Filter_CorporateAccount_for_brand": {
-                        "type": "Query",
-                        "inputs": {
-                            "from": "@body('Build_array')",
-                            "where": "@equals(item()?['contextPointSubtype'], 'CorporateAccount')"
-                        },
-                        "runAfter": {
-                            "Set_contextPointName": [
-                                "SUCCEEDED"
-                            ]
-                        }
-                    }
-                },
-                "runAfter": {
-                    "Get_Context_Point": [
+                    "Initialize_storeIdentifier": [
                         "SUCCEEDED"
                     ]
                 }
@@ -1201,7 +29,7 @@
                     ]
                 },
                 "runAfter": {
-                    "Initialize_spanTimeConfigJson": [
+                    "Initialize_storeName": [
                         "SUCCEEDED"
                     ]
                 }
@@ -1286,133 +114,1282 @@
                     ]
                 }
             },
-            "Request_Config_Configuration": {
-                "type": "Scope",
+            "Initialize_storeIdentifier": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "storeIdentifier",
+                            "type": "string",
+                            "value": "@{item()?['storeIdentifier']}"
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "For_each": {
+                "type": "foreach",
+                "foreach": "@body('Parse_input_JSON')",
                 "actions": {
-                    "Request_for_config_configuration": {
-                        "type": "ApiConnectionWebhook",
+                    "Set_storeIdentifier": {
+                        "type": "SetVariable",
                         "inputs": {
-                            "host": {
-                                "connection": {
-                                    "referenceName": "teams"
-                                }
-                            },
-                            "body": {
-                                "notificationUrl": "@listCallbackUrl()",
-                                "body": {
-                                    "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🚦Request for config keys info\",\n      \"weight\": \"Bolder\",      \n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🔧 **Next Steps:**\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"1. Apply configurations and destinations to the brand, franchise, or site as appropriate in Config API.\",\n      \"wrap\": true,\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Please enter the following values as appropriate\",\n      \"wrap\": true,\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"Input.Text\",\n      \"id\": \"forecastedSalesSnapshotsInterval\",\n      \"label\": \"ingest.forecasted_sales_snapshots_interval (in seconds)\",\n      \"value\": \"\",\n      \"size\": \"Small\"\n    },\n    {\n      \"type\": \"Input.Text\",\n      \"id\": \"startTimeForDailyAar\",\n      \"label\": \"ds.start_time_for_daily_aar (always per-site, HH:MM, time in 24-hour UTC)\",\n      \"value\": \"\",\n      \"size\": \"Small\"\n    },\n    {\n      \"type\": \"Input.Text\",\n      \"id\": \"minDate\",\n      \"label\": \"api.min_date (YYYY-MM-DD)\",\n      \"value\": \"\",\n      \"size\": \"Small\"\n    },\n    {\n      \"type\": \"Input.Text\",\n      \"id\": \"sosThreshold\",\n      \"label\": \"api.kpi__sos__threshold__weekly_baseline (number)\",\n      \"value\": \"\",\n      \"size\": \"Small\"\n    },\n    {\n      \"type\": \"Input.Text\",\n      \"id\": \"splhThreshold\",\n      \"label\": \"api.kpi__splh__threshold__weekly_baseline (number)\",\n      \"value\": \"\",\n      \"size\": \"Small\"\n    }\n  ],\n  \"actions\": [\n    {\n      \"type\": \"Action.Submit\",\n      \"title\": \"📤 Submit\",\n      \"data\": {\n        \"action\": \"submit\"\n      }\n    },\n    {\n      \"type\": \"Action.Submit\",\n      \"title\": \"⏭️ Skip\",\n      \"data\": {\n        \"action\": \"skipped\"\n      }\n    },\n    {\n      \"type\": \"Action.Submit\",\n      \"title\": \"🚪 Exit\",\n      \"data\": {\n        \"action\": \"exit\"\n      }\n    }\n  ]\n}",
-                                    "recipient": {
-                                        "groupId": "@parameters('TeamsGroupId')",
-                                        "channelId": "@parameters('TeamsChannelId')"
-                                    }
-                                }
-                            },
-                            "path": "/v1.0/teams/conversation/gatherinput/poster/Flow bot/location/@{encodeURIComponent('Channel')}/$subscriptions"
+                            "name": "storeIdentifier",
+                            "value": "@item()?['storeIdentifier']"
+                        },
+                        "runAfter": {
+                            "Display_item": [
+                                "SUCCEEDED"
+                            ]
                         }
                     },
-                    "Did_user_click_submit_or_skip_or_exit_1": {
-                        "type": "Switch",
-                        "expression": "@body('Request_for_config_configuration')?['data']?['action']",
-                        "default": {
-                            "actions": {}
-                        },
-                        "cases": {
-                            "Submit_1": {
-                                "actions": {
-                                    "Update_for_config_configuration_card_for_submit_1": {
-                                        "type": "ApiConnection",
-                                        "inputs": {
-                                            "host": {
-                                                "connection": {
-                                                    "referenceName": "teams"
-                                                }
-                                            },
-                                            "method": "post",
-                                            "body": {
-                                                "messageId": "@body('Request_for_span_type_and_time_configuration')['messageId']",
-                                                "recipient": {
-                                                    "groupId": "@parameters('TeamsGroupId')",
-                                                    "channelId": "@parameters('TeamsChannelId')"
-                                                },
-                                                "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🚦Request for config keys info\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🔧 **Next Steps:**\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"1. Apply configurations and destinations to the brand, franchise, or site as appropriate in Config API.\",\n      \"wrap\": true,\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Please enter the following values as appropriate\",\n      \"wrap\": true,\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"ingest.forecasted_sales_snapshots_interval (in seconds)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['forecastedSalesSnapshotsInterval']}\"\n        },\n        {\n          \"title\": \"ds.start_time_for_daily_aar (always per-site, HH:MM, time in 24-hour UTC)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['startTimeForDailyAar']}\"\n        },\n        {\n          \"title\": \"api.min_date (YYYY-MM-DD)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['minDate']}\"\n        },\n        {\n          \"title\": \"api.kpi__sos__threshold__weekly_baseline (number)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['sosThreshold']}\"\n        },\n        {\n          \"title\": \"api.kpi__splh__threshold__weekly_baseline (number)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['splhThreshold']}\"\n        },\n        {\n          \"title\": \"Action\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['action']}\"\n        }\n      ]\n    },\n  ]\n}"
-                                            },
-                                            "path": "/v1.0/teams/conversation/updateAdaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                                        }
+                    "Get_CVOC_Hierarchy_With_Aliases": {
+                        "type": "Scope",
+                        "actions": {
+                            "Build_array": {
+                                "type": "Select",
+                                "inputs": {
+                                    "from": "@body('Parse_JSON_-_GetCVOCHierarchyWithAliases')",
+                                    "select": {
+                                        "parentContextPointId": "@item()?['parentContextPointId']",
+                                        "parentContextPointName": "@item()?['parentContextPointName']",
+                                        "contextPointId": "@item()?['contextPointId']",
+                                        "contextPointName": "@item()?['contextPointName']",
+                                        "contextPointSubtype": "@item()?['contextPointSubType']"
                                     }
                                 },
-                                "case": "submit"
+                                "runAfter": {
+                                    "Parse_JSON_-_GetCVOCHierarchyWithAliases": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
                             },
-                            "Skip_1": {
-                                "actions": {
-                                    "Update_for_config_configuration_card_for_skip": {
-                                        "type": "ApiConnection",
-                                        "inputs": {
-                                            "host": {
-                                                "connection": {
-                                                    "referenceName": "teams"
+                            "Filter_site": {
+                                "type": "Query",
+                                "inputs": {
+                                    "from": "@body('Build_array')",
+                                    "where": "@equals(item()?['contextPointId'], body('HTTP_-_GetContextPoint')?['contextPointId'])"
+                                },
+                                "runAfter": {
+                                    "Build_array": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Set_accountId": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "accountId",
+                                    "value": "@body('Filter_site')?[0]?['parentContextPointId']"
+                                },
+                                "runAfter": {
+                                    "Filter_site": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Set_accountName": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "accountName",
+                                    "value": "@body('Filter_site')?[0]?['parentContextPointName']"
+                                },
+                                "runAfter": {
+                                    "Set_accountId": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Set_contextPointName": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "contextPointName",
+                                    "value": "@body('Filter_site')?[0]?['contextPointName']"
+                                },
+                                "runAfter": {
+                                    "Set_accountName": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Set_brandId": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "brandId",
+                                    "value": "@body('Filter_CorporateAccount_for_brand')?[0]?['contextPointId']"
+                                },
+                                "runAfter": {
+                                    "Filter_CorporateAccount_for_brand": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Set_brandName": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "brandName",
+                                    "value": "@body('Filter_CorporateAccount_for_brand')?[0]?['contextPointName']"
+                                },
+                                "runAfter": {
+                                    "Set_brandId": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Filter_CorporateAccount_for_brand": {
+                                "type": "Query",
+                                "inputs": {
+                                    "from": "@body('Build_array')",
+                                    "where": "@equals(item()?['contextPointSubtype'], 'CorporateAccount')"
+                                },
+                                "runAfter": {
+                                    "Set_contextPointName": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Parse_JSON_-_GetCVOCHierarchyWithAliases": {
+                                "type": "ParseJson",
+                                "inputs": {
+                                    "content": "@body('HTTP_-_GetCVOCHierarchyWithAliases')",
+                                    "schema": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "contextPointId": {
+                                                    "type": "integer"
+                                                },
+                                                "contextPointName": {
+                                                    "type": "string"
+                                                },
+                                                "contextPointType": {
+                                                    "type": "string"
+                                                },
+                                                "contextPointSubType": {
+                                                    "type": "string"
+                                                },
+                                                "aliasId": {
+                                                    "type": "integer"
+                                                },
+                                                "namespace": {
+                                                    "type": "string"
+                                                },
+                                                "identifier": {
+                                                    "type": "string"
+                                                },
+                                                "parentContextPointId": {
+                                                    "type": "integer"
+                                                },
+                                                "parentContextPointName": {
+                                                    "type": "string"
                                                 }
                                             },
-                                            "method": "post",
-                                            "body": {
-                                                "messageId": "@body('Request_for_span_type_and_time_configuration')['messageId']",
-                                                "recipient": {
-                                                    "groupId": "@parameters('TeamsGroupId')",
-                                                    "channelId": "@parameters('TeamsChannelId')"
-                                                },
-                                                "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🚦Request for config keys info\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🔧 **Next Steps:**\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"1. Apply configurations and destinations to the brand, franchise, or site as appropriate in Config API.\",\n      \"wrap\": true,\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Please enter the following values as appropriate\",\n      \"wrap\": true,\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"ingest.forecasted_sales_snapshots_interval (in seconds)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['forecastedSalesSnapshotsInterval']}\"\n        },\n        {\n          \"title\": \"ds.start_time_for_daily_aar (always per-site, HH:MM, time in 24-hour UTC)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['startTimeForDailyAar']}\"\n        },\n        {\n          \"title\": \"api.min_date (YYYY-MM-DD)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['minDate']}\"\n        },\n        {\n          \"title\": \"api.kpi__sos__threshold__weekly_baseline (number)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['sosThreshold']}\"\n        },\n        {\n          \"title\": \"api.kpi__splh__threshold__weekly_baseline (number)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['splhThreshold']}\"\n        },\n        {\n          \"title\": \"Action\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['action']}\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"⚠️ The system will continue to the next onboarding step\",\n      \"wrap\": true,\n      \"color\": \"Attention\",\n      \"spacing\": \"Medium\"\n    }\n  ]\n}\n"
-                                            },
-                                            "path": "/v1.0/teams/conversation/updateAdaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                                        }
-                                    }
-                                },
-                                "case": "skipped"
-                            },
-                            "Exit_2": {
-                                "actions": {
-                                    "Terminate_-_cancelled_2": {
-                                        "type": "Terminate",
-                                        "inputs": {
-                                            "runStatus": "Cancelled"
-                                        },
-                                        "runAfter": {
-                                            "Update_for_config_configuration_card_for_exit": [
-                                                "SUCCEEDED"
+                                            "required": [
+                                                "contextPointId",
+                                                "contextPointName",
+                                                "contextPointType",
+                                                "contextPointSubType"
                                             ]
                                         }
-                                    },
-                                    "Update_for_config_configuration_card_for_exit": {
-                                        "type": "ApiConnection",
-                                        "inputs": {
-                                            "host": {
-                                                "connection": {
-                                                    "referenceName": "teams"
-                                                }
-                                            },
-                                            "method": "post",
-                                            "body": {
-                                                "messageId": "@body('Request_for_span_type_and_time_configuration')['messageId']",
-                                                "recipient": {
-                                                    "groupId": "@parameters('TeamsGroupId')",
-                                                    "channelId": "@parameters('TeamsChannelId')"
-                                                },
-                                                "messageBody": "{\n  \"type\": \"AdaptiveCard\",\n  \"version\": \"1.4\",\n  \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n  \"body\": [\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🚦Request for config keys info\",\n      \"weight\": \"Bolder\",\n      \"size\": \"Medium\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"🔧 **Next Steps:**\",\n      \"wrap\": true\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"1. Apply configurations and destinations to the brand, franchise, or site as appropriate in Config API.\",\n      \"wrap\": true,\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"Please enter the following values as appropriate\",\n      \"wrap\": true,\n      \"weight\": \"Bolder\",\n      \"spacing\": \"Medium\"\n    },\n    {\n      \"type\": \"FactSet\",\n      \"facts\": [\n        {\n          \"title\": \"ingest.forecasted_sales_snapshots_interval (in seconds)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['forecastedSalesSnapshotsInterval']}\"\n        },\n        {\n          \"title\": \"ds.start_time_for_daily_aar (always per-site, HH:MM, time in 24-hour UTC)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['startTimeForDailyAar']}\"\n        },\n        {\n          \"title\": \"api.min_date (YYYY-MM-DD)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['minDate']}\"\n        },\n        {\n          \"title\": \"api.kpi__sos__threshold__weekly_baseline (number)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['sosThreshold']}\"\n        },\n        {\n          \"title\": \"api.kpi__splh__threshold__weekly_baseline (number)\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['splhThreshold']}\"\n        },\n        {\n          \"title\": \"Action\",\n          \"value\": \"@{body('Request_for_config_configuration')?['data']?['action']}\"\n        }\n      ]\n    },\n    {\n      \"type\": \"TextBlock\",\n      \"text\": \"⚠️ The system will exit, but you can always return later to restart the onboarding process when you're ready.\",\n      \"wrap\": true,\n      \"color\": \"Attention\",\n      \"spacing\": \"Medium\"\n    }\n  ]\n}"
-                                            },
-                                            "path": "/v1.0/teams/conversation/updateAdaptivecard/poster/Flow bot/location/@{encodeURIComponent('Channel')}"
-                                        }
                                     }
                                 },
-                                "case": "exit"
+                                "runAfter": {
+                                    "HTTP_-_GetCVOCHierarchyWithAliases": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "HTTP_-_GetCVOCHierarchyWithAliases": {
+                                "type": "Http",
+                                "inputs": {
+                                    "uri": "@parameters('E3DSpanService-GetCVOCHierarchyWithAliases')",
+                                    "method": "GET",
+                                    "headers": {
+                                        "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
+                                        "Content-Type": "application/json"
+                                    },
+                                    "queries": {
+                                        "contextPointId": "@{variables('contextPointId')}"
+                                    }
+                                },
+                                "runtimeConfiguration": {
+                                    "contentTransfer": {
+                                        "transferMode": "Chunked"
+                                    }
+                                }
                             }
                         },
                         "runAfter": {
-                            "Request_for_config_configuration": [
+                            "Get_Context_Point": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Upsert_Context_Point_Alias": {
+                        "type": "Scope",
+                        "actions": {
+                            "HTTP_-_UpsertContextPointAlias": {
+                                "type": "Http",
+                                "inputs": {
+                                    "uri": "@parameters('E3DAliasService-UpsertContextPointAlias')",
+                                    "method": "POST",
+                                    "headers": {
+                                        "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
+                                        "Content-Type": "application/json"
+                                    },
+                                    "body": [
+                                        {
+                                            "contextPointId": "@variables('contextPointId')",
+                                            "alias": "@variables('storeIdentifier')"
+                                        }
+                                    ]
+                                },
+                                "runtimeConfiguration": {
+                                    "contentTransfer": {
+                                        "transferMode": "Chunked"
+                                    }
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Display_item": {
+                        "type": "Compose",
+                        "inputs": "@item()"
+                    },
+                    "Get_Context_Point": {
+                        "type": "Scope",
+                        "actions": {
+                            "HTTP_-_GetContextPoint": {
+                                "type": "Http",
+                                "inputs": {
+                                    "uri": "@parameters('E3DAliasService-GetContextPoint')",
+                                    "method": "GET",
+                                    "headers": {
+                                        "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
+                                        "Content-Type": "application/json"
+                                    },
+                                    "queries": {
+                                        "identifier": "@{variables('storeIdentifier')}"
+                                    }
+                                },
+                                "operationOptions": "DisableAsyncPattern"
+                            },
+                            "Set_contextPointId": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "contextPointId",
+                                    "value": "@body('HTTP_-_GetContextPoint')?['contextPointId']"
+                                },
+                                "runAfter": {
+                                    "HTTP_-_GetContextPoint": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Set_storeIdentifier": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Post_Site_Configs": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_siteConfigKeys_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['siteConfigKeys'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Display_siteConfigKeys": {
+                                        "type": "Compose",
+                                        "inputs": "@item()?['siteConfigKeys']"
+                                    },
+                                    "HTTP_-_Set_site_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'))} ",
+                                            "method": "PUT",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "body": "@item()?['siteConfigKeys']",
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "Display_siteConfigKeys": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    },
+                                    "(For_debugging_only)_HTTP_Get-after_setting_site_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'),  '/keys')} ",
+                                            "method": "GET",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "HTTP_-_Set_site_specific_settings": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Post_Span_Type": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_spanTypes_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['spanTypes'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "HTTP-UpsertSpanType": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@parameters('E3DSpanService-UpsertSpanType')",
+                                            "method": "POST",
+                                            "headers": {
+                                                "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
+                                                "Content-Type": "application/json"
+                                            },
+                                            "body": "@item()?['spanTypes']"
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_Context_Point": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Post_Account_Configs": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_accountConfigKeys_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['accountConfigKeys'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Display_accountConfigKeys": {
+                                        "type": "Compose",
+                                        "inputs": "@item()?['accountConfigKeys']"
+                                    },
+                                    "HTTP_-_Set_account_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'))} ",
+                                            "method": "PUT",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "body": "@item()?['accountConfigKeys']",
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "Display_accountConfigKeys": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    },
+                                    "(For_debugging_only)_HTTP_Get-after_setting_account_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'),  '/keys')} ",
+                                            "method": "GET",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "HTTP_-_Set_account_specific_settings": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Post_Brand_Configs": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_brandConfigKeys_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['brandConfigKeys'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Display_brandConfigKeys": {
+                                        "type": "Compose",
+                                        "inputs": "@item()?['brandConfigKeys']"
+                                    },
+                                    "HTTP_-_Set_brand_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId'))} ",
+                                            "method": "PUT",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "body": "@item()?['brandConfigKeys']",
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "Display_brandConfigKeys": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    },
+                                    "(For_debugging_only)_HTTP_Get-after_setting_brand_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'),  '/keys')} ",
+                                            "method": "GET",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "HTTP_-_Set_brand_specific_settings": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Post_Global_Configs": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_globalConfigKeys_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['globalConfigKeys'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Display_globalConfigKeys": {
+                                        "type": "Compose",
+                                        "inputs": "@item()?['globalConfigKeys']"
+                                    },
+                                    "(For_debugging_only)_HTTP_Get-after_setting_global_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'),  '/keys')} ",
+                                            "method": "GET",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "HTTP_-_Set_gloabl_specific_settings": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    },
+                                    "HTTP_-_Set_gloabl_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{parameters('ConfigAPI')} ",
+                                            "method": "PUT",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "body": "@item()?['globalConfigKeys']",
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "Display_globalConfigKeys": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Delete_Site_Config_Keys": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_deleteSiteConfigKeys_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['deleteSiteConfigKeys'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Display_deleteSiteConfigKeys": {
+                                        "type": "Compose",
+                                        "inputs": "@item()?['deleteSiteConfigKeys']"
+                                    },
+                                    "(For_debugging_only)_HTTP_Get-after_deleting_site_config_keys": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'),  '/keys')} ",
+                                            "method": "GET",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "For_each_deleteSiteConfigKeys": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    },
+                                    "For_each_deleteSiteConfigKeys": {
+                                        "type": "Foreach",
+                                        "foreach": "@item()?['deleteSiteConfigKeys']",
+                                        "actions": {
+                                            "HTTP_-_delete_1_site_config_key": {
+                                                "type": "Http",
+                                                "inputs": {
+                                                    "uri": " @{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'), '/scopes/', items('For_each_deleteSiteConfigKeys')?['Post_Span_Time_Configurations'], '/keys/', items('For_each_deleteSiteConfigKeys')?['Name'])} ",
+                                                    "method": "DELETE",
+                                                    "authentication": {
+                                                        "type": "ManagedServiceIdentity",
+                                                        "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                                    }
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "Display_deleteSiteConfigKeys": [
+                                                "SUCCEEDED"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Delete_Site_Config_Constraints": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_deleteSiteConfigConstraints_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['deleteSiteConfigConstraints'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Display_deleteSiteConfigConstraints": {
+                                        "type": "Compose",
+                                        "inputs": "@item()?['deleteSiteConfigConstraints']"
+                                    },
+                                    "(For_debugging_only)_HTTP_Get-after_deleting_site_config_constraints": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'),  '/keys')} ",
+                                            "method": "GET",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "For_each_leteSiteConfigConstraints": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    },
+                                    "For_each_leteSiteConfigConstraints": {
+                                        "type": "Foreach",
+                                        "foreach": "@item()?['deleteSiteConfigKeys']",
+                                        "actions": {
+                                            "HTTP_-_delete_1_site_config_constraints": {
+                                                "type": "Http",
+                                                "inputs": {
+                                                    "uri": " @{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'), '/scopes/', items('For_each_leteSiteConfigConstraints')?['Post_Span_Time_Configurations'], '/keys/', items('For_each_leteSiteConfigConstraints')?['Name'])} ",
+                                                    "method": "DELETE",
+                                                    "authentication": {
+                                                        "type": "ManagedServiceIdentity",
+                                                        "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                                    }
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "Display_deleteSiteConfigConstraints": [
+                                                "SUCCEEDED"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Post_Span_Time_Configurations": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_spanTimeConfigurations_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['spanTimeConfigurations'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Upsert_Span_Time_Configurations.__(TODO)_may_need_to_look_through_each_span": {
+                                        "type": "Scope",
+                                        "actions": {
+                                            "(For_debug_only)_HTTP_-_GetSpanTimeConfigurations_after_upsert": {
+                                                "type": "Http",
+                                                "inputs": {
+                                                    "uri": "@parameters('E3DSpanService-GetSpanTimeConfigurations')",
+                                                    "method": "GET",
+                                                    "headers": {
+                                                        "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
+                                                        "Content-Type": "application/json"
+                                                    },
+                                                    "queries": {
+                                                        "siteId": "@{variables('contextPointId')}"
+                                                    }
+                                                },
+                                                "runAfter": {
+                                                    "HTTP_-_UpsertSpanTimeConfigurations": [
+                                                        "SUCCEEDED"
+                                                    ]
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            },
+                                            "HTTP_-_UpsertSpanTimeConfigurations": {
+                                                "type": "Http",
+                                                "inputs": {
+                                                    "uri": "@parameters('E3DSpanService-UpsertSpanTimeConfigurations')",
+                                                    "method": "POST",
+                                                    "headers": {
+                                                        "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
+                                                        "Content-Type": "application/json"
+                                                    },
+                                                    "body": "@item()?['spanTimeConfigurations']"
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
                                 "SUCCEEDED"
                             ]
                         }
                     }
                 },
                 "runAfter": {
-                    "Did_user_clicks_skip": [
+                    "Retrieve_Secrets,_Get_Token_for_E3D_APIs": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Retrieve_Secrets,_Get_Token_for_E3D_APIs": {
+                "type": "Scope",
+                "actions": {
+                    "Get_secret_e3d-api-clientid-q_from_kv": {
+                        "type": "ServiceProvider",
+                        "inputs": {
+                            "parameters": {
+                                "secretName": "e3d-api-clientid-q"
+                            },
+                            "serviceProviderConfiguration": {
+                                "connectionName": "keyVault",
+                                "operationId": "getSecret",
+                                "serviceProviderId": "/serviceProviders/keyVault"
+                            }
+                        }
+                    },
+                    "Get_secret_e3d-api-secret-q_from_kv": {
+                        "type": "ServiceProvider",
+                        "inputs": {
+                            "parameters": {
+                                "secretName": "e3d-api-secret-q"
+                            },
+                            "serviceProviderConfiguration": {
+                                "connectionName": "keyVault",
+                                "operationId": "getSecret",
+                                "serviceProviderId": "/serviceProviders/keyVault"
+                            }
+                        },
+                        "runAfter": {
+                            "Get_secret_e3d-api-clientid-q_from_kv": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "HTTP_-_Get_token_for_E3D_APIs": {
+                        "type": "Http",
+                        "inputs": {
+                            "uri": "@concat('https://login.microsoftonline.com/', parameters('E3DTenantId'), '/oauth2/v2.0/token')",
+                            "method": "POST",
+                            "headers": {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            "body": "client_id=@{body('Get_secret_e3d-api-clientid-q_from_kv')?['value']}&client_secret=@{body('Get_secret_e3d-api-secret-q_from_kv')?['value']}&scope=@{concat('https://wintersnowb2c.onmicrosoft.com/', body('Get_secret_e3d-api-clientid-q_from_kv')?['value'], '/.default')\r\n}&grant_type=client_credentials\n"
+                        },
+                        "runAfter": {
+                            "Get_secret_e3d-api-secret-q_from_kv": [
+                                "SUCCEEDED"
+                            ]
+                        },
+                        "operationOptions": "DisableAsyncPattern"
+                    }
+                },
+                "runAfter": {
+                    "Parse_input_JSON": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Parse_input_JSON": {
+                "type": "ParseJson",
+                "inputs": {
+                    "content": "@triggerBody()",
+                    "schema": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "storeIdentifier": {
+                                    "type": "string"
+                                },
+                                "spanTypes": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "SpanType": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "SpanType"
+                                        ]
+                                    }
+                                },
+                                "spanTimeConfigurations": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "SpanTypeId": {
+                                                "type": "integer"
+                                            },
+                                            "SiteId": {
+                                                "type": "integer"
+                                            },
+                                            "StartTime": {
+                                                "type": "string"
+                                            },
+                                            "DurationInSeconds": {
+                                                "type": "integer"
+                                            },
+                                            "StartOn": {
+                                                "type": "string"
+                                            },
+                                            "ExpiryOn": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "SpanTypeId",
+                                            "SiteId",
+                                            "StartTime",
+                                            "DurationInSeconds",
+                                            "StartOn",
+                                            "ExpiryOn"
+                                        ]
+                                    }
+                                },
+                                "globalConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "brandConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "accountConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "siteConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "deleteSiteConfigKeys": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "scope": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "scope",
+                                            "name"
+                                        ]
+                                    }
+                                },
+                                "deleteSiteConfigConstraints": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "scope": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "scope",
+                                            "name"
+                                        ]
+                                    }
+                                }
+                            },
+                            "required": [
+                                "storeIdentifier"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Initialize_contextPointName": [
                         "SUCCEEDED"
                     ]
                 }
@@ -1423,7 +1400,303 @@
         "triggers": {
             "When_a_HTTP_request_is_received": {
                 "type": "Request",
-                "kind": "Http"
+                "kind": "Http",
+                "inputs": {
+                    "schema": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "storeIdentifier": {
+                                    "type": "string"
+                                },
+                                "spanTypes": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "SpanType": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "SpanType"
+                                        ]
+                                    }
+                                },
+                                "spanTimeConfigurations": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "SpanTypeId": {
+                                                "type": "integer"
+                                            },
+                                            "SiteId": {
+                                                "type": "integer"
+                                            },
+                                            "StartTime": {
+                                                "type": "string"
+                                            },
+                                            "DurationInSeconds": {
+                                                "type": "integer"
+                                            },
+                                            "StartOn": {
+                                                "type": "string"
+                                            },
+                                            "ExpiryOn": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "SpanTypeId",
+                                            "SiteId",
+                                            "StartTime",
+                                            "DurationInSeconds",
+                                            "StartOn",
+                                            "ExpiryOn"
+                                        ]
+                                    }
+                                },
+                                "globalConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "brandConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "accountConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "siteConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "deleteSiteConfigKeys": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "scope": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "scope",
+                                            "name"
+                                        ]
+                                    }
+                                },
+                                "deleteSiteConfigConstraints": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "scope": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "scope",
+                                            "name"
+                                        ]
+                                    }
+                                }
+                            },
+                            "required": [
+                                "storeIdentifier"
+                            ]
+                        }
+                    }
+                }
             }
         }
     },
