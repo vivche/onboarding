@@ -28,6 +28,6 @@ jobs:
 
       - name: Trigger Logic App
         run: |
-          curl -X POST "${{ env.LOGIC_APP_URL }}" \
+          curl -X POST "${{ env.ONBOARDING_BATCH_LOGIC_APP_DEV_URL }}" \
             -H "Content-Type: application/json" \
             -d "${{ env.payload }}"
