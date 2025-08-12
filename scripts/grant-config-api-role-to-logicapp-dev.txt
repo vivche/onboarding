@@ -1,0 +1,53 @@
+# Variables to fill in
+subscriptionId="bf2c5c07-2536-497d-9b87-7f0a0fa5a2b3"
+resourceGroup="INS-KOSWEBAPP-001-Q"
+logicAppName="INS-ONBOARDING-LA-001-Q"
+enterpriseAppAppId="b90039e1-cf4a-4a69-90cf-2cb4f2b26987"   #KOS.Config.Dev
+appRoleName1="Config.Reader"
+appRoleName2="Config.Writer"
+
+# Get the Logic App's managed identity object ID
+#resourceId="/subscriptions/$subscriptionId/resourceGroups/$resourceGroup/providers/Microsoft.Logic/workflows/$logicAppName"
+resourceId="/subscriptions/$subscriptionId/resourceGroups/$resourceGroup/providers/Microsoft.Web/sites/$logicAppName"
+
+echo "Logic App resource id: $resourceId"
+
+managedIdentityObjectId=$(az resource show --ids $resourceId --query identity.principalId -o tsv)
+echo "Logic App managed identify id: $managedIdentityObjectId"
+
+# Get the service principal ID of the enterprise app
+graphAppId=$(az ad sp list --filter "appId eq '$enterpriseAppAppId'" --query "[0].id" -o tsv)
+echo " Service principal ID of config api: $graphAppId"
+
+# Get the AppRole ID for the specified role name
+appRoleId1=$(az ad sp show --id $graphAppId --query "appRoles[?displayName=='$appRoleName1' && contains(allowedMemberTypes, 'Application')].id | [0]" -o tsv)
+echo "App Role Name: $appRoleName1; App Role ID : $appRoleId1"
+
+appRoleId2=$(az ad sp show --id $graphAppId --query "appRoles[?displayName=='$appRoleName2' && contains(allowedMemberTypes, 'Application')].id | [0]" -o tsv)
+echo "App Role Name: $appRoleName2; App Role ID : $appRoleId2"
+
+# Assign the app role to the Logic App's managed identity
+
+echo "Managed Identity Object ID: $managedIdentityObjectId"
+echo "Enterprise App SP ID: $graphAppId"
+echo "App Role ID 1: $appRoleId1"
+
+az rest --method post \
+  --uri "https://graph.microsoft.com/v1.0/servicePrincipals/$managedIdentityObjectId/appRoleAssignments" \
+  --body "{
+    \"principalId\": \"$managedIdentityObjectId\",
+    \"resourceId\": \"$graphAppId\",
+    \"appRoleId\": \"$appRoleId1\"
+  }"
+  
+echo "Managed Identity Object ID: $managedIdentityObjectId"
+echo "Enterprise App SP ID: $graphAppId"
+echo "App Role ID 2: $appRoleId2"
+  
+  az rest --method post \
+  --uri "https://graph.microsoft.com/v1.0/servicePrincipals/$managedIdentityObjectId/appRoleAssignments" \
+  --body "{
+    \"principalId\": \"$managedIdentityObjectId\",
+    \"resourceId\": \"$graphAppId\",
+    \"appRoleId\": \"$appRoleId2\"
+  }"

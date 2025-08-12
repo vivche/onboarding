@@ -1,16 +1,14 @@
 [
   {
-    "contextPointId": 3899976,
-    "storeIdentifier": "CKE||SDC|1100083",
-	
-	
+    "contextPointId": 3593198,
+    "storeIdentifier": "CKE||SDC|1100385",
+		
     "spanTypes": [
       {
         "SpanType": "Snack"
       }
     ],
-	
-	
+		
     "spanTimeConfigurations": [
       {
         "SpanTypeId": 11,
@@ -363,5 +361,4 @@
       ]
     }
   }
-  
 ]

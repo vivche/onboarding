@@ -1,5 +1,6 @@
 [
   {
+    "contextPointId": 3899976,
     "storeIdentifier": "CKE||SDC|1100083",
     "deleteSiteConfigKeys": [
       { "scope": "ds", "name": "max_slow_items" },
