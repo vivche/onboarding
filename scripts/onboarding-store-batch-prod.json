@@ -1,0 +1,1760 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Initialize_storeName": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "storeName",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_storeIdentifier": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Initialize_brandId": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "brandId",
+                            "type": "integer"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_storeName": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Initialize_accountId_aka_franchise": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "accountId",
+                            "type": "integer"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_brandName": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Initialize_contextPointId": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "contextPointId",
+                            "type": "integer"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_accountName": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Initialize_brandName": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "brandName",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_brandId": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Initialize_accountName": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "accountName",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_accountId_aka_franchise": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Initialize_contextPointName": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "contextPointName",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_contextPointId": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Initialize_storeIdentifier": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "storeIdentifier",
+                            "type": "string",
+                            "value": "@{item()?['storeIdentifier']}"
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "For_each": {
+                "type": "foreach",
+                "foreach": "@body('Parse_input_JSON')",
+                "actions": {
+                    "Set_contextPointId_input": {
+                        "type": "SetVariable",
+                        "inputs": {
+                            "name": "contextPointId",
+                            "value": "@item()?['contextPointId']"
+                        },
+                        "runAfter": {
+                            "Display_item": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Get_CVOC_Hierarchy_With_Aliases": {
+                        "type": "Scope",
+                        "actions": {
+                            "Build_array": {
+                                "type": "Select",
+                                "inputs": {
+                                    "from": "@body('Parse_JSON_-_GetCVOCHierarchyWithAliases')",
+                                    "select": {
+                                        "parentContextPointId": "@item()?['parentContextPointId']",
+                                        "parentContextPointName": "@item()?['parentContextPointName']",
+                                        "contextPointId": "@item()?['contextPointId']",
+                                        "contextPointName": "@item()?['contextPointName']",
+                                        "contextPointSubtype": "@item()?['contextPointSubType']"
+                                    }
+                                },
+                                "runAfter": {
+                                    "Parse_JSON_-_GetCVOCHierarchyWithAliases": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Filter_site": {
+                                "type": "Query",
+                                "inputs": {
+                                    "from": "@body('Build_array')",
+                                    "where": "@equals(item()?['contextPointId'], variables('contextPointId'))"
+                                },
+                                "runAfter": {
+                                    "Build_array": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Set_accountId": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "accountId",
+                                    "value": "@body('Filter_site')?[0]?['parentContextPointId']"
+                                },
+                                "runAfter": {
+                                    "Filter_site": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Set_accountName": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "accountName",
+                                    "value": "@body('Filter_site')?[0]?['parentContextPointName']"
+                                },
+                                "runAfter": {
+                                    "Set_accountId": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Set_contextPointName": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "contextPointName",
+                                    "value": "@body('Filter_site')?[0]?['contextPointName']"
+                                },
+                                "runAfter": {
+                                    "Set_accountName": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Set_brandId": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "brandId",
+                                    "value": "@body('Filter_CorporateAccount_for_brand')?[0]?['contextPointId']"
+                                },
+                                "runAfter": {
+                                    "Filter_CorporateAccount_for_brand": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Set_brandName": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "brandName",
+                                    "value": "@body('Filter_CorporateAccount_for_brand')?[0]?['contextPointName']"
+                                },
+                                "runAfter": {
+                                    "Set_brandId": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Filter_CorporateAccount_for_brand": {
+                                "type": "Query",
+                                "inputs": {
+                                    "from": "@body('Build_array')",
+                                    "where": "@equals(item()?['contextPointSubtype'], 'CorporateAccount')"
+                                },
+                                "runAfter": {
+                                    "Set_contextPointName": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Parse_JSON_-_GetCVOCHierarchyWithAliases": {
+                                "type": "ParseJson",
+                                "inputs": {
+                                    "content": "@body('HTTP_-_GetCVOCHierarchyWithAliases')",
+                                    "schema": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "contextPointId": {
+                                                    "type": "integer"
+                                                },
+                                                "contextPointName": {
+                                                    "type": "string"
+                                                },
+                                                "contextPointType": {
+                                                    "type": "string"
+                                                },
+                                                "contextPointSubType": {
+                                                    "type": "string"
+                                                },
+                                                "aliasId": {
+                                                    "type": "integer"
+                                                },
+                                                "namespace": {
+                                                    "type": "string"
+                                                },
+                                                "identifier": {
+                                                    "type": "string"
+                                                },
+                                                "parentContextPointId": {
+                                                    "type": "integer"
+                                                },
+                                                "parentContextPointName": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "contextPointId",
+                                                "contextPointName",
+                                                "contextPointType",
+                                                "contextPointSubType"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "runAfter": {
+                                    "HTTP_-_GetCVOCHierarchyWithAliases": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "HTTP_-_GetCVOCHierarchyWithAliases": {
+                                "type": "Http",
+                                "inputs": {
+                                    "uri": "@parameters('E3DSpanService-GetCVOCHierarchyWithAliases')",
+                                    "method": "GET",
+                                    "headers": {
+                                        "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
+                                        "Content-Type": "application/json"
+                                    },
+                                    "queries": {
+                                        "contextPointId": "@{variables('contextPointId')}"
+                                    }
+                                },
+                                "runtimeConfiguration": {
+                                    "contentTransfer": {
+                                        "transferMode": "Chunked"
+                                    }
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Set_storeIdentifier": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Upsert_Context_Point_Alias": {
+                        "type": "Scope",
+                        "actions": {
+                            "HTTP_-_UpsertContextPointAlias": {
+                                "type": "Http",
+                                "inputs": {
+                                    "uri": "@parameters('E3DAliasService-UpsertContextPointAlias')",
+                                    "method": "POST",
+                                    "headers": {
+                                        "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
+                                        "Content-Type": "application/json"
+                                    },
+                                    "body": [
+                                        {
+                                            "contextPointId": "@variables('contextPointId')",
+                                            "alias": "@variables('storeIdentifier')"
+                                        }
+                                    ]
+                                },
+                                "runtimeConfiguration": {
+                                    "contentTransfer": {
+                                        "transferMode": "Chunked"
+                                    }
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Display_item": {
+                        "type": "Compose",
+                        "inputs": "@item()"
+                    },
+                    "Post_Site_Configs": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_siteConfigKeys_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['siteConfigKeys'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Display_siteConfigKeys": {
+                                        "type": "Compose",
+                                        "inputs": "@item()?['siteConfigKeys']"
+                                    },
+                                    "HTTP_-_Set_site_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'))} ",
+                                            "method": "PUT",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "body": "@item()?['siteConfigKeys']",
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "Display_siteConfigKeys": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    },
+                                    "(For_debugging_only)_HTTP_Get-after_setting_site_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'),  '/keys')} ",
+                                            "method": "GET",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "HTTP_-_Set_site_specific_settings": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Post_Span_Type": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_spanTypes_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['spanTypes'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "HTTP-UpsertSpanType": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@parameters('E3DSpanService-UpsertSpanType')",
+                                            "method": "POST",
+                                            "headers": {
+                                                "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
+                                                "Content-Type": "application/json"
+                                            },
+                                            "body": "@item()?['spanTypes']"
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Set_storeIdentifier": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Post_Account_Configs": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_accountConfigKeys_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['accountConfigKeys'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Display_accountConfigKeys": {
+                                        "type": "Compose",
+                                        "inputs": "@item()?['accountConfigKeys']"
+                                    },
+                                    "HTTP_-_Set_account_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'))} ",
+                                            "method": "PUT",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "body": "@item()?['accountConfigKeys']",
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "Display_accountConfigKeys": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    },
+                                    "(For_debugging_only)_HTTP_Get-after_setting_account_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'),  '/keys')} ",
+                                            "method": "GET",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "HTTP_-_Set_account_specific_settings": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Post_Brand_Configs": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_brandConfigKeys_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['brandConfigKeys'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Display_brandConfigKeys": {
+                                        "type": "Compose",
+                                        "inputs": "@item()?['brandConfigKeys']"
+                                    },
+                                    "HTTP_-_Set_brand_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId'))} ",
+                                            "method": "PUT",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "body": "@item()?['brandConfigKeys']",
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "Display_brandConfigKeys": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    },
+                                    "(For_debugging_only)_HTTP_Get-after_setting_brand_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'),  '/keys')} ",
+                                            "method": "GET",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "HTTP_-_Set_brand_specific_settings": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Post_Global_Configs": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_globalConfigKeys_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['globalConfigKeys'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Display_globalConfigKeys": {
+                                        "type": "Compose",
+                                        "inputs": "@item()?['globalConfigKeys']"
+                                    },
+                                    "(For_debugging_only)_HTTP_Get-after_setting_global_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'),  '/keys')} ",
+                                            "method": "GET",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "HTTP_-_Set_gloabl_specific_settings": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    },
+                                    "HTTP_-_Set_gloabl_specific_settings": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{parameters('ConfigAPI')} ",
+                                            "method": "PUT",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "body": "@item()?['globalConfigKeys']",
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "Display_globalConfigKeys": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Delete_Site_Config_Keys": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_deleteSiteConfigKeys_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['deleteSiteConfigKeys'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Display_deleteSiteConfigKeys": {
+                                        "type": "Compose",
+                                        "inputs": "@item()?['deleteSiteConfigKeys']"
+                                    },
+                                    "(For_debugging_only)_HTTP_Get-after_deleting_site_config_keys": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'),  '/keys')} ",
+                                            "method": "GET",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "For_each_deleteSiteConfigKeys": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    },
+                                    "For_each_deleteSiteConfigKeys": {
+                                        "type": "Foreach",
+                                        "foreach": "@item()?['deleteSiteConfigKeys']",
+                                        "actions": {
+                                            "HTTP_-_delete_1_site_config_key": {
+                                                "type": "Http",
+                                                "inputs": {
+                                                    "uri": " @{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'), '/scopes/', items('For_each_deleteSiteConfigKeys')?['Post_Span_Time_Configurations'], '/keys/', items('For_each_deleteSiteConfigKeys')?['Name'])} ",
+                                                    "method": "DELETE",
+                                                    "authentication": {
+                                                        "type": "ManagedServiceIdentity",
+                                                        "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                                    }
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            },
+                                            "Exception_is_thrown,_skip_and_go_to_next_key_1": {
+                                                "type": "Compose",
+                                                "inputs": "Exception is thrown, skip and go to next key",
+                                                "runAfter": {
+                                                    "HTTP_-_delete_1_site_config_key": [
+                                                        "TIMEDOUT",
+                                                        "FAILED"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "Display_deleteSiteConfigKeys": [
+                                                "SUCCEEDED"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Delete_Site_Config_Constraints": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_deleteSiteConfigConstraints_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['deleteSiteConfigConstraints'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Display_deleteSiteConfigConstraints": {
+                                        "type": "Compose",
+                                        "inputs": "@item()?['deleteSiteConfigConstraints']"
+                                    },
+                                    "(For_debugging_only)_HTTP_Get-after_deleting_site_config_constraints": {
+                                        "type": "Http",
+                                        "inputs": {
+                                            "uri": "@{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'),  '/keys')} ",
+                                            "method": "GET",
+                                            "headers": {
+                                                "Accepts": " application/json"
+                                            },
+                                            "authentication": {
+                                                "type": "ManagedServiceIdentity",
+                                                "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "For_each_leteSiteConfigConstraints": [
+                                                "SUCCEEDED"
+                                            ]
+                                        },
+                                        "runtimeConfiguration": {
+                                            "contentTransfer": {
+                                                "transferMode": "Chunked"
+                                            }
+                                        }
+                                    },
+                                    "For_each_leteSiteConfigConstraints": {
+                                        "type": "Foreach",
+                                        "foreach": "@item()?['deleteSiteConfigKeys']",
+                                        "actions": {
+                                            "HTTP_-_delete_1_site_config_constraints": {
+                                                "type": "Http",
+                                                "inputs": {
+                                                    "uri": " @{concat(parameters('ConfigAPI'), '/brands/', variables('brandId') , '/accounts/', variables('accountId'), '/sites/',  variables('contextPointId'), '/scopes/', items('For_each_leteSiteConfigConstraints')?['Post_Span_Time_Configurations'], '/keys/', items('For_each_leteSiteConfigConstraints')?['Name'])} ",
+                                                    "method": "DELETE",
+                                                    "authentication": {
+                                                        "type": "ManagedServiceIdentity",
+                                                        "audience": "@{parameters('ConfigAuthenticationAudience')}"
+                                                    }
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            },
+                                            "Exception_is_thrown,_skip_and_go_to_next_key_2": {
+                                                "type": "Compose",
+                                                "inputs": "Exception is thrown, skip and go to next key",
+                                                "runAfter": {
+                                                    "HTTP_-_delete_1_site_config_constraints": [
+                                                        "SUCCEEDED",
+                                                        "TIMEDOUT",
+                                                        "FAILED"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "Display_deleteSiteConfigConstraints": [
+                                                "SUCCEEDED"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Post_Span_Time_Configurations": {
+                        "type": "Scope",
+                        "actions": {
+                            "Has_spanTimeConfigurations_in_payload_json": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "not": {
+                                                "equals": [
+                                                    "@empty(item()?['spanTimeConfigurations'])",
+                                                    "@true"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Upsert_Span_Time_Configurations.__(TODO)_may_need_to_look_through_each_span": {
+                                        "type": "Scope",
+                                        "actions": {
+                                            "(For_debug_only)_HTTP_-_GetSpanTimeConfigurations_after_upsert": {
+                                                "type": "Http",
+                                                "inputs": {
+                                                    "uri": "@parameters('E3DSpanService-GetSpanTimeConfigurations')",
+                                                    "method": "GET",
+                                                    "headers": {
+                                                        "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
+                                                        "Content-Type": "application/json"
+                                                    },
+                                                    "queries": {
+                                                        "siteId": "@{variables('contextPointId')}"
+                                                    }
+                                                },
+                                                "runAfter": {
+                                                    "HTTP_-_UpsertSpanTimeConfigurations": [
+                                                        "SUCCEEDED"
+                                                    ]
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            },
+                                            "HTTP_-_UpsertSpanTimeConfigurations": {
+                                                "type": "Http",
+                                                "inputs": {
+                                                    "uri": "@parameters('E3DSpanService-UpsertSpanTimeConfigurations')",
+                                                    "method": "POST",
+                                                    "headers": {
+                                                        "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
+                                                        "Content-Type": "application/json"
+                                                    },
+                                                    "body": "@item()?['spanTimeConfigurations']"
+                                                },
+                                                "runtimeConfiguration": {
+                                                    "contentTransfer": {
+                                                        "transferMode": "Chunked"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_CVOC_Hierarchy_With_Aliases": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Set_storeIdentifier": {
+                        "type": "SetVariable",
+                        "inputs": {
+                            "name": "storeIdentifier",
+                            "value": "@item()?['storeIdentifier']"
+                        },
+                        "runAfter": {
+                            "Set_contextPointId_input": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Catch_any_exception_and_move_on": {
+                        "type": "Compose",
+                        "inputs": "Catch any exception and move on",
+                        "runAfter": {
+                            "Post_Brand_Configs": [
+                                "SUCCEEDED",
+                                "FAILED",
+                                "TIMEDOUT"
+                            ],
+                            "Upsert_Context_Point_Alias": [
+                                "SUCCEEDED",
+                                "FAILED",
+                                "TIMEDOUT"
+                            ],
+                            "Post_Site_Configs": [
+                                "SUCCEEDED"
+                            ],
+                            "Post_Span_Type": [
+                                "SUCCEEDED",
+                                "TIMEDOUT",
+                                "FAILED"
+                            ],
+                            "Post_Account_Configs": [
+                                "SUCCEEDED",
+                                "TIMEDOUT",
+                                "FAILED"
+                            ],
+                            "Post_Global_Configs": [
+                                "SUCCEEDED",
+                                "FAILED",
+                                "TIMEDOUT"
+                            ],
+                            "Delete_Site_Config_Keys": [
+                                "SUCCEEDED",
+                                "TIMEDOUT",
+                                "FAILED"
+                            ],
+                            "Delete_Site_Config_Constraints": [
+                                "SUCCEEDED",
+                                "TIMEDOUT",
+                                "FAILED"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Retrieve_Secrets,_Get_Token_for_E3D_APIs": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Retrieve_Secrets,_Get_Token_for_E3D_APIs": {
+                "type": "Scope",
+                "actions": {
+                    "Get_secret_e3d-api-clientid-p_from_kv": {
+                        "type": "ServiceProvider",
+                        "inputs": {
+                            "parameters": {
+                                "secretName": "e3d-api-clientid-p"
+                            },
+                            "serviceProviderConfiguration": {
+                                "connectionName": "keyVault",
+                                "operationId": "getSecret",
+                                "serviceProviderId": "/serviceProviders/keyVault"
+                            }
+                        }
+                    },
+                    "HTTP_-_Get_token_for_E3D_APIs": {
+                        "type": "Http",
+                        "inputs": {
+                            "uri": "@concat('https://login.microsoftonline.com/', parameters('E3DTenantId'), '/oauth2/v2.0/token')",
+                            "method": "POST",
+                            "headers": {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            "body": "client_id=@{body('Get_secret_e3d-api-clientid-p_from_kv')?['value']}&client_secret=&scope=@{concat('https://wintersnowb2c.onmicrosoft.com/', body('Get_secret_e3d-api-clientid-p_from_kv')?['value'], '/.default')\r\n}&grant_type=client_credentials\n"
+                        },
+                        "runAfter": {
+                            "Get_secret_e3d-api-secret-p_from_kv": [
+                                "SUCCEEDED"
+                            ]
+                        },
+                        "operationOptions": "DisableAsyncPattern"
+                    },
+                    "Get_secret_e3d-api-secret-p_from_kv": {
+                        "type": "ServiceProvider",
+                        "inputs": {
+                            "parameters": {
+                                "secretName": "e3d-api-secret-p"
+                            },
+                            "serviceProviderConfiguration": {
+                                "connectionName": "keyVault",
+                                "operationId": "getSecret",
+                                "serviceProviderId": "/serviceProviders/keyVault"
+                            }
+                        },
+                        "runAfter": {
+                            "Get_secret_e3d-api-clientid-p_from_kv": [
+                                "SUCCEEDED"
+                            ]
+                        },
+                        "runtimeConfiguration": {
+                            "secureData": {
+                                "properties": [
+                                    "inputs",
+                                    "outputs"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Parse_input_JSON": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Parse_input_JSON": {
+                "type": "ParseJson",
+                "inputs": {
+                    "content": "@triggerBody()",
+                    "schema": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "contextPointId": {
+                                    "type": "integer"
+                                },
+                                "storeIdentifier": {
+                                    "type": "string"
+                                },
+                                "spanTypes": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "SpanType": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "SpanType"
+                                        ]
+                                    }
+                                },
+                                "spanTimeConfigurations": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "SpanTypeId": {
+                                                "type": "integer"
+                                            },
+                                            "SiteId": {
+                                                "type": "integer"
+                                            },
+                                            "StartTime": {
+                                                "type": "string"
+                                            },
+                                            "DurationInSeconds": {
+                                                "type": "integer"
+                                            },
+                                            "StartOn": {
+                                                "type": "string"
+                                            },
+                                            "ExpiryOn": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "SpanTypeId",
+                                            "SiteId",
+                                            "StartTime",
+                                            "DurationInSeconds",
+                                            "StartOn",
+                                            "ExpiryOn"
+                                        ]
+                                    }
+                                },
+                                "globalConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "brandConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "accountConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "siteConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "deleteSiteConfigKeys": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "scope": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "scope",
+                                            "name"
+                                        ]
+                                    }
+                                },
+                                "deleteSiteConfigConstraints": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "scope": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "scope",
+                                            "name"
+                                        ]
+                                    }
+                                }
+                            },
+                            "required": [
+                                "contextPointId",
+                                "storeIdentifier"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Initialize_contextPointName": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "When_a_HTTP_request_is_received": {
+                "type": "Request",
+                "kind": "Http",
+                "inputs": {
+                    "schema": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "contextPointId": {
+                                    "type": "integer"
+                                },
+                                "storeIdentifier": {
+                                    "type": "string"
+                                },
+                                "spanTypes": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "SpanType": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "SpanType"
+                                        ]
+                                    }
+                                },
+                                "spanTimeConfigurations": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "SpanTypeId": {
+                                                "type": "integer"
+                                            },
+                                            "SiteId": {
+                                                "type": "integer"
+                                            },
+                                            "StartTime": {
+                                                "type": "string"
+                                            },
+                                            "DurationInSeconds": {
+                                                "type": "integer"
+                                            },
+                                            "StartOn": {
+                                                "type": "string"
+                                            },
+                                            "ExpiryOn": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "SpanTypeId",
+                                            "SiteId",
+                                            "StartTime",
+                                            "DurationInSeconds",
+                                            "StartOn",
+                                            "ExpiryOn"
+                                        ]
+                                    }
+                                },
+                                "globalConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "brandConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "accountConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "siteConfigKeys": {
+                                    "type": "object",
+                                    "properties": {
+                                        "keys": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        },
+                                        "constraints": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "scope": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "scope",
+                                                    "name",
+                                                    "value"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "deleteSiteConfigKeys": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "scope": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "scope",
+                                            "name"
+                                        ]
+                                    }
+                                },
+                                "deleteSiteConfigConstraints": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "scope": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "scope",
+                                            "name"
+                                        ]
+                                    }
+                                }
+                            },
+                            "required": [
+                                "contextPointId",
+                                "storeIdentifier"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "kind": "Stateful"
+}
