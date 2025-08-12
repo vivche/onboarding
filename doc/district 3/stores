@@ -1,0 +1,64 @@
+brand||account|site
+
+identifier: CKE||SDC|1100083
+
+brand: 4182473
+account: 246155785
+context point id:3899976
+
+
+District 5 - 10 stores <-  all on board
+
+District 3 - 9-10 stores
+1100133
+1100157
+1100168
+1100331
+1100385
+1100405
+1100483
+1100613
+1100629
+
+==========
+Stage Stores
+==========
+store identifier: CKE||SDC|1100083
+storeid: 1100168
+siteid: 3369778
+brandid: 3867316
+brandname: C K E ENTERPRISES
+accountid: 105874977
+accountname: District 3
+
+
+1100629 = 3437134
+1100157 = 3441571
+1100089 = 3562410
+1100385 = 3593198
+1100331 = 3622862
+1100405 = 3661087
+1100483 = 3711284
+1100613 = 3991351
+ 
+=============
+Prod Stores
+=============
+store identifier: CKE||SDC|1100083
+storeid: 1100168
+siteid: 10118542
+brandid: 7482107
+brandname: C K E ENTERPRISES
+accountid: 34792705
+accountname: District 3
+
+
+1100629 = 10162890
+1100157 = 10174101
+1100089 = 11095538
+1100385 = 11154364
+1100331 = 11170133
+1100405 = 11298882
+1100483 = 10309774
+1100613 = 11455901
+1100133 = 11320274
