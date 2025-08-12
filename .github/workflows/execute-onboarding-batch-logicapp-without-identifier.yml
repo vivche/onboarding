@@ -24,6 +24,6 @@ jobs:
 
       - name: Trigger Logic App
         run: |
-          curl -X POST "${ONBOARDING_BATCH_LOGIC_APP_WITHOUT_IDENTIFIER_DEV_URL}" \
+          curl -X POST "${ONBOARDING_BATCH_LOGIC_APP_DEV_URL}" \
             -H "Content-Type: application/json" \
             -d @payload.json
