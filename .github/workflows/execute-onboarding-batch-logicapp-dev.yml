@@ -1,4 +1,4 @@
-name: Trigger Onboarding Batch Logic App in Dev
+name: Trigger Onboarding Batch in Dev
 
 on:
   workflow_dispatch:

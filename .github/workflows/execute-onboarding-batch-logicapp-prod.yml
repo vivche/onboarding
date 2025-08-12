@@ -1,4 +1,4 @@
-name: Trigger Onboarding Batch Logic App in Prod
+name: Trigger Onboarding Batch in Prod
 
 on:
   workflow_dispatch:
