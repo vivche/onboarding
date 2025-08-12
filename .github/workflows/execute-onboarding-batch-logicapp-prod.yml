@@ -1,0 +1,29 @@
+name: Trigger Onboarding Batch Logic App in Prod
+
+on:
+  workflow_dispatch:
+    inputs:
+      jsonFile:
+        description: 'Path to the JSON file inside the input folder'
+        required: true
+        default: 'inputs/json_sample_template-upsert.json'
+
+jobs:
+  trigger-logic-app:
+    runs-on: ubuntu-latest
+    env:
+      ONBOARDING_BATCH_LOGIC_APP_PROD_URL: ${{ secrets.ONBOARDING_BATCH_LOGIC_APP_PROD_URL }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Read JSON file and save to payload.json
+        run: |
+          cp "${{ github.event.inputs.jsonFile }}" payload.json
+
+      - name: Trigger Logic App
+        run: |
+          curl -X POST "${ONBOARDING_BATCH_LOGIC_APP_PROD_URL}" \
+            -H "Content-Type: application/json" \
+            -d @payload.json

@@ -1,0 +1,531 @@
+[
+  {
+    "contextPointId": 1,
+    "name": "Root",
+    "typeId": 1000,
+    "subTypeId": 1,
+    "statusTypeId": 1,
+    "children": [
+      {
+        "contextPointId": 2,
+        "name": "Ecolab View Of Customer",
+        "typeId": 1000,
+        "subTypeId": 2,
+        "statusTypeId": 1
+      },
+      {
+        "contextPointId": 3,
+        "name": "EcolabGeography",
+        "typeId": 1000,
+        "subTypeId": 3,
+        "statusTypeId": 1
+      },
+      {
+        "contextPointId": 4,
+        "name": "Customer View Of Customer",
+        "typeId": 1000,
+        "subTypeId": 4,
+        "statusTypeId": 1,
+        "children": [
+          {
+            "contextPointId": 3867316,
+            "name": "C K E ENTERPRISES",
+            "typeId": 4000,
+            "subTypeId": 1,
+            "statusTypeId": 1,
+            "children": [
+              {
+                "contextPointId": 105373696,
+                "name": "C K E Enterprises Hierarchy",
+                "typeId": 4000,
+                "subTypeId": 3,
+                "statusTypeId": 1,
+                "children": [
+                  {
+                    "contextPointId": 105644401,
+                    "name": "C K E Enterprises",
+                    "typeId": 4000,
+                    "subTypeId": 2,
+                    "statusTypeId": 1,
+                    "children": [
+                      {
+                        "contextPointId": 105644402,
+                        "name": "Carl's Jr United States",
+                        "typeId": 4000,
+                        "subTypeId": 2,
+                        "statusTypeId": 1,
+                        "children": [
+                          {
+                            "contextPointId": 105644403,
+                            "name": "Franchise",
+                            "typeId": 4000,
+                            "subTypeId": 2,
+                            "statusTypeId": 1,
+                            "children": [
+                              {
+                                "contextPointId": 105373697,
+                                "name": "SDC Restaurants",
+                                "typeId": 4000,
+                                "subTypeId": 2,
+                                "statusTypeId": 1,
+                                "children": [
+                                  {
+                                    "contextPointId": 105874977,
+                                    "name": "District 3",
+                                    "typeId": 4000,
+                                    "subTypeId": 2,
+                                    "statusTypeId": 1,
+                                    "children": [
+                                      {
+                                        "contextPointId": 3369778,
+                                        "name": "CARL'S JR. #1100168",
+                                        "typeId": 5000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1,
+                                        "children": [
+                                          {
+                                            "contextPointId": 3067071,
+                                            "name": "CARL0543-0001",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          },
+                                          {
+                                            "contextPointId": 3113849,
+                                            "name": "CARL0537-0008",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "contextPointId": 3437134,
+                                        "name": "CARL'S JR. #1100629",
+                                        "typeId": 5000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1,
+                                        "children": [
+                                          {
+                                            "contextPointId": 3011709,
+                                            "name": "CARL0561-0001",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          },
+                                          {
+                                            "contextPointId": 3223280,
+                                            "name": "CARL0537-0024",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "contextPointId": 3441571,
+                                        "name": "CARL'S JR. #1100157",
+                                        "typeId": 5000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1,
+                                        "children": [
+                                          {
+                                            "contextPointId": 2465217,
+                                            "name": "CARL0537-0007",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          },
+                                          {
+                                            "contextPointId": 2484675,
+                                            "name": "CARL0542-0001",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "contextPointId": 3562410,
+                                        "name": "CARL'S JR. #1100089",
+                                        "typeId": 5000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1,
+                                        "children": [
+                                          {
+                                            "contextPointId": 2500690,
+                                            "name": "CARL0537-0002",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          },
+                                          {
+                                            "contextPointId": 3092278,
+                                            "name": "CARL0538-0001",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "contextPointId": 3593198,
+                                        "name": "CARL'S JR. #1100385",
+                                        "typeId": 5000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1,
+                                        "children": [
+                                          {
+                                            "contextPointId": 3031445,
+                                            "name": "CARL0537-0015",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          },
+                                          {
+                                            "contextPointId": 3181190,
+                                            "name": "CARL0551-0001",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "contextPointId": 3622862,
+                                        "name": "CARL'S JR. #1100331",
+                                        "typeId": 5000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1,
+                                        "children": [
+                                          {
+                                            "contextPointId": 3311779,
+                                            "name": "CARL0549-0001",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "contextPointId": 3661087,
+                                        "name": "CARL'S JR. #1100405",
+                                        "typeId": 5000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1,
+                                        "children": [
+                                          {
+                                            "contextPointId": 2646404,
+                                            "name": "CARL0537-0014",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          },
+                                          {
+                                            "contextPointId": 2717217,
+                                            "name": "CARL0406-0001",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "contextPointId": 3711284,
+                                        "name": "CARL'S JR. #1100483",
+                                        "typeId": 5000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1,
+                                        "children": [
+                                          {
+                                            "contextPointId": 2643796,
+                                            "name": "CARL0537-0020",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          },
+                                          {
+                                            "contextPointId": 2797618,
+                                            "name": "CARL0555-0001",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "contextPointId": 3991351,
+                                        "name": "CARL'S JR. #1100613",
+                                        "typeId": 5000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1,
+                                        "children": [
+                                          {
+                                            "contextPointId": 2578818,
+                                            "name": "CARL0537-0023",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          },
+                                          {
+                                            "contextPointId": 3033334,
+                                            "name": "CARL0399-0001",
+                                            "typeId": 6000,
+                                            "subTypeId": 1,
+                                            "statusTypeId": 1
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "contextPointId": 3361917,
+                                    "name": "RushReadyTestOne",
+                                    "typeId": 5000,
+                                    "subTypeId": 1,
+                                    "statusTypeId": 1,
+                                    "children": [
+                                      {
+                                        "contextPointId": 2652515,
+                                        "name": "CARL1260-0004",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      },
+                                      {
+                                        "contextPointId": 2756815,
+                                        "name": "CARL1377-0004",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "contextPointId": 3362107,
+                                    "name": "RushReadyTestTwo",
+                                    "typeId": 5000,
+                                    "subTypeId": 1,
+                                    "statusTypeId": 1,
+                                    "children": [
+                                      {
+                                        "contextPointId": 2472042,
+                                        "name": "CARL1085-0001",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "contextPointId": 3464385,
+                                    "name": "CARL'S JR. #1100197",
+                                    "typeId": 5000,
+                                    "subTypeId": 1,
+                                    "statusTypeId": 1,
+                                    "children": [
+                                      {
+                                        "contextPointId": 2917608,
+                                        "name": "CARL0544-0001",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      },
+                                      {
+                                        "contextPointId": 3081382,
+                                        "name": "CARL0537-0009",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "contextPointId": 3565140,
+                                    "name": "CARL'S JR. #1100281",
+                                    "typeId": 5000,
+                                    "subTypeId": 1,
+                                    "statusTypeId": 1,
+                                    "children": [
+                                      {
+                                        "contextPointId": 2851125,
+                                        "name": "CARL0803-0001",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      },
+                                      {
+                                        "contextPointId": 3008322,
+                                        "name": "CARL0537-0011",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "contextPointId": 3584798,
+                                    "name": "CARL'S JR #1100083",
+                                    "typeId": 5000,
+                                    "subTypeId": 1,
+                                    "statusTypeId": 1,
+                                    "children": [
+                                      {
+                                        "contextPointId": 2776987,
+                                        "name": "CARL0537-0001",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "contextPointId": 3619829,
+                                    "name": "CARL'S JR. #1100546",
+                                    "typeId": 5000,
+                                    "subTypeId": 1,
+                                    "statusTypeId": 1,
+                                    "children": [
+                                      {
+                                        "contextPointId": 2972324,
+                                        "name": "CARL0557-0001",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "contextPointId": 3725988,
+                                    "name": "CARL'S JR. #1100409",
+                                    "typeId": 5000,
+                                    "subTypeId": 1,
+                                    "statusTypeId": 1,
+                                    "children": [
+                                      {
+                                        "contextPointId": 2747548,
+                                        "name": "CARL1075-0001",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "contextPointId": 3738227,
+                                    "name": "CARL'S JR. #1100585",
+                                    "typeId": 5000,
+                                    "subTypeId": 1,
+                                    "statusTypeId": 1,
+                                    "children": [
+                                      {
+                                        "contextPointId": 2521372,
+                                        "name": "CARL0537-0022",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      },
+                                      {
+                                        "contextPointId": 3242343,
+                                        "name": "CARL0558-0001",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "contextPointId": 3822552,
+                                    "name": "CARL'S JR. #1100652",
+                                    "typeId": 5000,
+                                    "subTypeId": 1,
+                                    "statusTypeId": 1,
+                                    "children": [
+                                      {
+                                        "contextPointId": 2865161,
+                                        "name": "CARL0563-0001",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "contextPointId": 3847497,
+                                    "name": "CARL'S JR. #1100632",
+                                    "typeId": 5000,
+                                    "subTypeId": 1,
+                                    "statusTypeId": 1,
+                                    "children": [
+                                      {
+                                        "contextPointId": 2506145,
+                                        "name": "CARL0562-0001",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      },
+                                      {
+                                        "contextPointId": 3189763,
+                                        "name": "CARL0537-0025",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "contextPointId": 3881772,
+                                    "name": "CARL'S JR. 1102588",
+                                    "typeId": 5000,
+                                    "subTypeId": 1,
+                                    "statusTypeId": 1,
+                                    "children": [
+                                      {
+                                        "contextPointId": 2514856,
+                                        "name": "CARL0537-0027",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "contextPointId": 3991294,
+                                    "name": "CARL'S JR. #1100575",
+                                    "typeId": 5000,
+                                    "subTypeId": 1,
+                                    "statusTypeId": 1,
+                                    "children": [
+                                      {
+                                        "contextPointId": 2429883,
+                                        "name": "CARL0401-0001",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      },
+                                      {
+                                        "contextPointId": 2805280,
+                                        "name": "CARL0537-0016",
+                                        "typeId": 6000,
+                                        "subTypeId": 1,
+                                        "statusTypeId": 1
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

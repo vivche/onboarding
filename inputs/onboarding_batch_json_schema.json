@@ -3,6 +3,9 @@
   "items": {
     "type": "object",
     "properties": {
+      "contextPointId": {
+        "type": "integer"
+      },
       "storeIdentifier": {
         "type": "string"
       },
@@ -288,6 +291,7 @@
       }
     },
     "required": [
+      "contextPointId",
       "storeIdentifier"
     ]
   }

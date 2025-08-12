@@ -131,11 +131,11 @@
                 "type": "foreach",
                 "foreach": "@body('Parse_input_JSON')",
                 "actions": {
-                    "Set_storeIdentifier": {
+                    "Set_contextPointId_input": {
                         "type": "SetVariable",
                         "inputs": {
-                            "name": "storeIdentifier",
-                            "value": "@item()?['storeIdentifier']"
+                            "name": "contextPointId",
+                            "value": "@item()?['contextPointId']"
                         },
                         "runAfter": {
                             "Display_item": [
@@ -168,7 +168,7 @@
                                 "type": "Query",
                                 "inputs": {
                                     "from": "@body('Build_array')",
-                                    "where": "@equals(item()?['contextPointId'], body('HTTP_-_GetContextPoint')?['contextPointId'])"
+                                    "where": "@equals(item()?['contextPointId'], variables('contextPointId'))"
                                 },
                                 "runAfter": {
                                     "Build_array": [
@@ -321,7 +321,7 @@
                             }
                         },
                         "runAfter": {
-                            "Get_Context_Point": [
+                            "Set_storeIdentifier": [
                                 "SUCCEEDED"
                             ]
                         }
@@ -361,43 +361,6 @@
                     "Display_item": {
                         "type": "Compose",
                         "inputs": "@item()"
-                    },
-                    "Get_Context_Point": {
-                        "type": "Scope",
-                        "actions": {
-                            "HTTP_-_GetContextPoint": {
-                                "type": "Http",
-                                "inputs": {
-                                    "uri": "@parameters('E3DAliasService-GetContextPoint')",
-                                    "method": "GET",
-                                    "headers": {
-                                        "Authorization": "@{concat('Bearer ', body('HTTP_-_Get_token_for_E3D_APIs')?['access_token'])}",
-                                        "Content-Type": "application/json"
-                                    },
-                                    "queries": {
-                                        "identifier": "@{variables('storeIdentifier')}"
-                                    }
-                                },
-                                "operationOptions": "DisableAsyncPattern"
-                            },
-                            "Set_contextPointId": {
-                                "type": "SetVariable",
-                                "inputs": {
-                                    "name": "contextPointId",
-                                    "value": "@body('HTTP_-_GetContextPoint')?['contextPointId']"
-                                },
-                                "runAfter": {
-                                    "HTTP_-_GetContextPoint": [
-                                        "SUCCEEDED"
-                                    ]
-                                }
-                            }
-                        },
-                        "runAfter": {
-                            "Set_storeIdentifier": [
-                                "SUCCEEDED"
-                            ]
-                        }
                     },
                     "Post_Site_Configs": {
                         "type": "Scope",
@@ -524,7 +487,7 @@
                             }
                         },
                         "runAfter": {
-                            "Get_Context_Point": [
+                            "Set_storeIdentifier": [
                                 "SUCCEEDED"
                             ]
                         }
@@ -843,6 +806,16 @@
                                                         "transferMode": "Chunked"
                                                     }
                                                 }
+                                            },
+                                            "Exception_is_thrown,_skip_and_go_to_next_key_1": {
+                                                "type": "Compose",
+                                                "inputs": "Exception is thrown, skip and go to next key",
+                                                "runAfter": {
+                                                    "HTTP_-_delete_1_site_config_key": [
+                                                        "TIMEDOUT",
+                                                        "FAILED"
+                                                    ]
+                                                }
                                             }
                                         },
                                         "runAfter": {
@@ -927,6 +900,17 @@
                                                     "contentTransfer": {
                                                         "transferMode": "Chunked"
                                                     }
+                                                }
+                                            },
+                                            "Exception_is_thrown,_skip_and_go_to_next_key_2": {
+                                                "type": "Compose",
+                                                "inputs": "Exception is thrown, skip and go to next key",
+                                                "runAfter": {
+                                                    "HTTP_-_delete_1_site_config_constraints": [
+                                                        "SUCCEEDED",
+                                                        "TIMEDOUT",
+                                                        "FAILED"
+                                                    ]
                                                 }
                                             }
                                         },
@@ -1023,6 +1007,18 @@
                                 "SUCCEEDED"
                             ]
                         }
+                    },
+                    "Set_storeIdentifier": {
+                        "type": "SetVariable",
+                        "inputs": {
+                            "name": "storeIdentifier",
+                            "value": "@item()?['storeIdentifier']"
+                        },
+                        "runAfter": {
+                            "Set_contextPointId_input": [
+                                "SUCCEEDED"
+                            ]
+                        }
                     }
                 },
                 "runAfter": {
@@ -1098,6 +1094,9 @@
                         "items": {
                             "type": "object",
                             "properties": {
+                                "contextPointId": {
+                                    "type": "integer"
+                                },
                                 "storeIdentifier": {
                                     "type": "string"
                                 },
@@ -1383,6 +1382,7 @@
                                 }
                             },
                             "required": [
+                                "contextPointId",
                                 "storeIdentifier"
                             ]
                         }
@@ -1407,6 +1407,9 @@
                         "items": {
                             "type": "object",
                             "properties": {
+                                "contextPointId": {
+                                    "type": "integer"
+                                },
                                 "storeIdentifier": {
                                     "type": "string"
                                 },
@@ -1692,6 +1695,7 @@
                                 }
                             },
                             "required": [
+                                "contextPointId",
                                 "storeIdentifier"
                             ]
                         }
