@@ -1095,7 +1095,7 @@
                             "headers": {
                                 "Content-Type": "application/x-www-form-urlencoded"
                             },
-                            "body": "client_id=@{body('Get_secret_e3d-api-clientid-p_from_kv')?['value']}&client_secret=&scope=@{concat('https://wintersnowb2c.onmicrosoft.com/', body('Get_secret_e3d-api-clientid-p_from_kv')?['value'], '/.default')\r\n}&grant_type=client_credentials\n"
+                            "body": "client_id=@{body('Get_secret_e3d-api-clientid-p_from_kv')?['value']}&client_secret=@{body('Get_secret_e3d-api-secret-p_from_kv')?['value']}&scope=@{concat('https://account.ecolab.com/', body('Get_secret_e3d-api-clientid-p_from_kv')?['value'], '/.default')}&grant_type=client_credentials\n"
                         },
                         "runAfter": {
                             "Get_secret_e3d-api-secret-p_from_kv": [
@@ -1120,14 +1120,6 @@
                             "Get_secret_e3d-api-clientid-p_from_kv": [
                                 "SUCCEEDED"
                             ]
-                        },
-                        "runtimeConfiguration": {
-                            "secureData": {
-                                "properties": [
-                                    "inputs",
-                                    "outputs"
-                                ]
-                            }
                         }
                     }
                 },
