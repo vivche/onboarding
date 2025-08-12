@@ -1,4 +1,4 @@
-name: Trigger Onboarding Batch Logic App
+name: Trigger Onboarding Batch Logic App using brandid, accountId, and siteId
 
 on:
   workflow_dispatch:
@@ -6,13 +6,13 @@ on:
       jsonFile:
         description: 'Path to the JSON file inside the input folder'
         required: true
-        default: 'inputs/json_sample_template-upsert.json'
+        default: 'inputs/json_sample_template-upsert_without_identifier.json'
 
 jobs:
   trigger-logic-app:
     runs-on: ubuntu-latest
     env:
-      ONBOARDING_BATCH_LOGIC_APP_DEV_URL: ${{ secrets.ONBOARDING_BATCH_LOGIC_APP_DEV_URL }}
+      ONBOARDING_BATCH_LOGIC_APP_DEV_URL: ${{ secrets.ONBOARDING_BATCH_LOGIC_APP_WITHOUT_IDENTIFIER_DEV_URL }}
 
     steps:
       - name: Checkout repository
