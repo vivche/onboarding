@@ -6,7 +6,7 @@ on:
       jsonFile:
         description: 'Path to the JSON file inside the input folder'
         required: true
-        default: 'inputs/json_sample_template-upsert.json'
+        default: 'inputs/stage/json_sample_template-upsert.json'
 
 jobs:
   trigger-logic-app:
