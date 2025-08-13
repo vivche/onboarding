@@ -3,7 +3,66 @@
     "contextPointId": 11095538,
     "storeIdentifier": "CKE||SDC|1100089",
     
-     "siteConfigKeys": {
+    "spanTimeConfigurations": [
+      {
+        "SpanTypeId": 11,
+        "SiteId": 11095538,
+        "StartTime": "06:00:00",
+        "DurationInSeconds": 18000,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2200-12-31"
+      },
+      {
+        "SpanTypeId": 12,
+        "SiteId": 11095538,
+        "StartTime": "11:00:00",
+        "DurationInSeconds": 10800,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2200-12-31"
+      },
+      {
+        "SpanTypeId": 13,
+        "SiteId": 11095538,
+        "StartTime": "14:00:00",
+        "DurationInSeconds": 10800,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2200-12-31"
+      },
+      {
+        "SpanTypeId": 14,
+        "SiteId": 11095538,
+        "StartTime": "17:00:00",
+        "DurationInSeconds": 10800,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2200-12-31"
+      },
+      {
+        "SpanTypeId": 15,
+        "SiteId": 11095538,
+        "StartTime": "20:00:00",
+        "DurationInSeconds": 18000,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2025-01-31"
+      },
+      {
+        "SpanTypeId": 16,
+        "SiteId": 11095538,
+        "StartTime": "01:00:00",
+        "DurationInSeconds": 10800,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2200-12-31"
+      },
+      {
+        "SpanTypeId": 17,
+        "SiteId": 11095538,
+        "StartTime": "00:00:00",
+        "DurationInSeconds": 86399,
+        "StartOn": "2025-01-01",
+        "ExpiryOn": "2200-12-31"
+      }
+    ],
+    
+    "siteConfigKeys": {
       "keys": [
         {
           "scope": "api",
