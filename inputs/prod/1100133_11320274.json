@@ -1,0 +1,78 @@
+[
+  {
+    "contextPointId": 11320274,
+    "storeIdentifier": "CKE||SDC|1100133",
+    
+     "siteConfigKeys": {
+      "keys": [
+        {
+          "scope": "api",
+          "name": "kpi_splh_threshold_weekly_baseline",
+          "value": "77"
+        },
+        {
+          "scope": "api",
+          "name": "kpi_sos_threshold_weekly_baseline",
+          "value": "384"
+        },
+        {
+          "scope": "api",
+          "name": "min_date",
+          "value": "2025-05-01"
+        },
+        {
+          "scope": "ds",
+          "name": "start_time_for_daily_aar",
+          "value": "13:00"
+        },
+        {
+          "scope": "ingest",
+          "name": "sales_filename_pattern",
+          "value": "^(\\d+)\\\\FORECAST_SALES\\d{8}_\\d{12}\\.csv$"
+        },
+        {
+          "scope": "ingest",
+          "name": "labor_filename_pattern",
+          "value": "^(\\d+)\\\\FORECAST_SALES\\d{8}_\\d{12}\\.csv$"
+        },
+        {
+          "scope": "ingest",
+          "name": "order_filename_pattern",
+          "value": "^\\d{6}(\\d{7})\\.zip$"
+        }
+      ],
+      "constraints": [
+        {
+          "scope": "api",
+          "name": "kpi_splh_threshold_weekly_baseline",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "api",
+          "name": "kpi_sos_threshold_weekly_baseline",
+          "value": "IS_NUMBER"
+        },
+        {
+          "scope": "api",
+          "name": "min_date",
+          "value": "IS_DATE"
+        },
+        {
+          "scope": "ingest",
+          "name": "sales_filename_pattern",
+          "value": "IS_STRING"
+        },
+        {
+          "scope": "ingest",
+          "name": "labor_filename_pattern",
+          "value": "IS_STRING"
+        },
+        {
+          "scope": "ingest",
+          "name": "order_filename_pattern",
+          "value": "IS_STRING"
+        }
+      ]
+    }
+  }
+]
