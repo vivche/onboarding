@@ -164,11 +164,11 @@
                                     ]
                                 }
                             },
-                            "Filter_site": {
+                            "Filter_franchise": {
                                 "type": "Query",
                                 "inputs": {
                                     "from": "@body('Build_array')",
-                                    "where": "@equals(item()?['contextPointId'], variables('contextPointId'))"
+                                    "where": "@equals(item()?['parentContextPointName'], 'Franchise')"
                                 },
                                 "runAfter": {
                                     "Build_array": [
@@ -180,10 +180,10 @@
                                 "type": "SetVariable",
                                 "inputs": {
                                     "name": "accountId",
-                                    "value": "@body('Filter_site')?[0]?['parentContextPointId']"
+                                    "value": "@body('Filter_franchise')?[0]?['contextPointId']"
                                 },
                                 "runAfter": {
-                                    "Filter_site": [
+                                    "Filter_franchise": [
                                         "SUCCEEDED"
                                     ]
                                 }
@@ -192,7 +192,7 @@
                                 "type": "SetVariable",
                                 "inputs": {
                                     "name": "accountName",
-                                    "value": "@body('Filter_site')?[0]?['parentContextPointName']"
+                                    "value": "@body('Filter_franchise')?[0]?['contextPointName']"
                                 },
                                 "runAfter": {
                                     "Set_accountId": [
@@ -204,7 +204,7 @@
                                 "type": "SetVariable",
                                 "inputs": {
                                     "name": "contextPointName",
-                                    "value": "@body('Filter_site')?[0]?['contextPointName']"
+                                    "value": "@body('Filter_franchise')?[0]?['contextPointName']"
                                 },
                                 "runAfter": {
                                     "Set_accountName": [
@@ -1019,6 +1019,52 @@
                                 "SUCCEEDED"
                             ]
                         }
+                    },
+                    "Catch_any_exception_and_move_on": {
+                        "type": "Compose",
+                        "inputs": "Catch any exception and move on",
+                        "runAfter": {
+                            "Post_Global_Configs": [
+                                "FAILED",
+                                "TIMEDOUT",
+                                "SUCCEEDED"
+                            ],
+                            "Post_Site_Configs": [
+                                "FAILED",
+                                "TIMEDOUT",
+                                "SUCCEEDED"
+                            ],
+                            "Upsert_Context_Point_Alias": [
+                                "FAILED",
+                                "TIMEDOUT",
+                                "SUCCEEDED"
+                            ],
+                            "Post_Span_Type": [
+                                "FAILED",
+                                "TIMEDOUT",
+                                "SUCCEEDED"
+                            ],
+                            "Post_Account_Configs": [
+                                "FAILED",
+                                "TIMEDOUT",
+                                "SUCCEEDED"
+                            ],
+                            "Post_Brand_Configs": [
+                                "FAILED",
+                                "TIMEDOUT",
+                                "SUCCEEDED"
+                            ],
+                            "Delete_Site_Config_Keys": [
+                                "FAILED",
+                                "TIMEDOUT",
+                                "SUCCEEDED"
+                            ],
+                            "Delete_Site_Config_Constraints": [
+                                "FAILED",
+                                "TIMEDOUT",
+                                "SUCCEEDED"
+                            ]
+                        }
                     }
                 },
                 "runAfter": {
@@ -1059,6 +1105,14 @@
                             "Get_secret_e3d-api-clientid-q_from_kv": [
                                 "SUCCEEDED"
                             ]
+                        },
+                        "runtimeConfiguration": {
+                            "secureData": {
+                                "properties": [
+                                    "inputs",
+                                    "outputs"
+                                ]
+                            }
                         }
                     },
                     "HTTP_-_Get_token_for_E3D_APIs": {
@@ -1076,7 +1130,15 @@
                                 "SUCCEEDED"
                             ]
                         },
-                        "operationOptions": "DisableAsyncPattern"
+                        "operationOptions": "DisableAsyncPattern",
+                        "runtimeConfiguration": {
+                            "secureData": {
+                                "properties": [
+                                    "inputs",
+                                    "outputs"
+                                ]
+                            }
+                        }
                     }
                 },
                 "runAfter": {

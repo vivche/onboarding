@@ -164,11 +164,11 @@
                                     ]
                                 }
                             },
-                            "Filter_site": {
+                            "Filter_franchiese": {
                                 "type": "Query",
                                 "inputs": {
                                     "from": "@body('Build_array')",
-                                    "where": "@equals(item()?['contextPointId'], variables('contextPointId'))"
+                                    "where": "@equals(item()?['parentContextPointName'], 'Franchise')"
                                 },
                                 "runAfter": {
                                     "Build_array": [
@@ -180,10 +180,10 @@
                                 "type": "SetVariable",
                                 "inputs": {
                                     "name": "accountId",
-                                    "value": "@body('Filter_site')?[0]?['parentContextPointId']"
+                                    "value": "@body('Filter_franchiese')?[0]?['parentContextPointId']"
                                 },
                                 "runAfter": {
-                                    "Filter_site": [
+                                    "Filter_franchiese": [
                                         "SUCCEEDED"
                                     ]
                                 }
@@ -192,7 +192,7 @@
                                 "type": "SetVariable",
                                 "inputs": {
                                     "name": "accountName",
-                                    "value": "@body('Filter_site')?[0]?['parentContextPointName']"
+                                    "value": "@body('Filter_franchiese')?[0]?['contextPointName']"
                                 },
                                 "runAfter": {
                                     "Set_accountId": [
@@ -204,7 +204,7 @@
                                 "type": "SetVariable",
                                 "inputs": {
                                     "name": "contextPointName",
-                                    "value": "@body('Filter_site')?[0]?['contextPointName']"
+                                    "value": "@body('Filter_franchiese')?[0]?['contextPointName']"
                                 },
                                 "runAfter": {
                                     "Set_accountName": [
